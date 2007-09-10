@@ -1,4 +1,4 @@
-package my.paintbrush;
+package my.paintbrush.properties;
 
 import org.eclipse.swt.graphics.Color;
 

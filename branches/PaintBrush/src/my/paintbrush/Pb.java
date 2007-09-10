@@ -2,43 +2,30 @@ package my.paintbrush;
 
 import java.util.ArrayList;
 
+import my.paintbrush.properties.PropertiesComp;
+import my.paintbrush.tools.Circle;
+import my.paintbrush.tools.DrawingObject;
+import my.paintbrush.tools.DrawingTool;
+import my.paintbrush.tools.Line;
+import my.paintbrush.tools.Rectangle;
+import my.paintbrush.tools.RoundRectangle;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 
 public class Pb {
-
-	public enum Drawing {
-		NONE("<none>"),
-		LINE("Line"),
-		RECTANGLE("Rectangle"),
-		ROUNDRECTANGLE("Round Rectangle"),
-		CIRCLE("Circle");
-		
-		String disName;
-		
-		Drawing(String disName) {
-			this.disName = disName;
-		}
-	};
 	
 	private Canvas canvas;
+	private PropertiesComp propComp;
 	
-	private Canvas fColorSel;
-	private Canvas bColorSel;
-	private Spinner widthSel;
-	
-	private Drawing selTool = Drawing.RECTANGLE;
-	private Drawing drawing = Drawing.NONE;
+	private DrawingTool selTool = DrawingTool.RECTANGLE;
+	private DrawingTool drawingTool = DrawingTool.NONE;
 	
 	java.util.List<DrawingObject> drawingObjects = new ArrayList<DrawingObject>();
 	
@@ -56,79 +43,59 @@ public class Pb {
 		display.dispose();
 	}
 	
-	public void createContents(final Shell shell) {
-		Properties defaultProp = new Properties(3,
-				new Color(Display.getCurrent(), 255, 0, 0),
-				new Color(Display.getCurrent(), 0, 0, 255),
-				30, 30);
-		
-		shell.setLayout(new GridLayout(2, false));
-		canvas = new Canvas(shell, SWT.BORDER);
+	public void createDrawingCanvas(Shell shell, int style) {
+		canvas = new Canvas(shell, style);
 		GridData gridData = new GridData(300, 300);
+		gridData.verticalSpan = 2;
 		canvas.setLayoutData(gridData);
-		
-		Composite propertiesComp = new Composite(shell, SWT.BORDER);
-		propertiesComp.setLayout(new GridLayout(1, false));
-		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		propertiesComp.setLayoutData(gridData);
-		
-		final Combo toolSel = new Combo(propertiesComp, SWT.NONE);
-		for (Drawing tool : Drawing.values())
+	}
+	
+	public void createToolSelector(Shell shell, int style) {
+		final Combo toolSel = new Combo(shell, style);
+		for (DrawingTool tool : DrawingTool.values())
 			toolSel.add(tool.disName);
-		toolSel.setSelection(new Point(1, 1));
+		//toolSel.setSelection(new Point(1, 1));
 		toolSel.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
-				selTool = Drawing.values()[toolSel.getSelectionIndex()];
+				selTool = DrawingTool.values()[toolSel.getSelectionIndex()];
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {}
 		});
-		
-		widthSel = new Spinner(propertiesComp, SWT.NONE);
-		widthSel.setMinimum(1);
-		widthSel.setMaximum(50);
-		widthSel.setSelection(defaultProp.width);
-		
-		MouseListener colorSelMouseListener = new MouseAdapter() {
-			public void mouseDoubleClick(MouseEvent e) {
-				ColorDialog dialog = new ColorDialog(shell);
-				dialog.setRGB(((Canvas)e.getSource()).getBackground().getRGB());
-				RGB selRGB = dialog.open();
-				if (selRGB != null)
-					((Canvas)e.getSource()).setBackground(new Color(Display.getCurrent(), selRGB));
-			}
-		};
-		
-		fColorSel = new Canvas(propertiesComp, SWT.BORDER);
-		fColorSel.setBackground(defaultProp.fColor);
-		fColorSel.setLayoutData(new GridData(50, 50));
-		fColorSel.addMouseListener(colorSelMouseListener);
-		
-		bColorSel = new Canvas(propertiesComp, SWT.BORDER);
-		bColorSel.setBackground(defaultProp.bColor);
-		bColorSel.setLayoutData(new GridData(50, 50));
-		bColorSel.addMouseListener(colorSelMouseListener);
+	}
+	
+	public void createPropertiesComp(Shell shell, int style) {
+		propComp = new PropertiesComp(shell, style); 
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		propComp.setLayoutData(gridData);
+	}
+	
+	public void createContents(final Shell shell) {
+		shell.setLayout(new GridLayout(2, false));
+		createDrawingCanvas(shell, SWT.BORDER);
+		createToolSelector(shell, SWT.NONE);
+		createPropertiesComp(shell, SWT.BORDER);
 	}
 	
 	public void addDrawListener() {
 		canvas.addMouseListener(new MouseListener() {
 			public void mouseUp(MouseEvent e) {
 				paintAll();
-				drawing = Drawing.NONE;
+				drawingTool = DrawingTool.NONE;
 			}
 			public void mouseDown(MouseEvent e) {
-				drawing = selTool;
+				drawingTool = selTool;
 				switch (selTool) {
 				case LINE:
-					drawingObjects.add(new Line(e.x, e.y, getCurProps()));
+					drawingObjects.add(new Line(e.x, e.y, propComp.getCurProps()));
 					break;
 				case RECTANGLE:
-					drawingObjects.add(new Rectangle(e.x, e.y, getCurProps()));
+					drawingObjects.add(new Rectangle(e.x, e.y, propComp.getCurProps()));
 					break;
 				case ROUNDRECTANGLE:
-					drawingObjects.add(new RoundRectangle(e.x, e.y, getCurProps()));
+					drawingObjects.add(new RoundRectangle(e.x, e.y, propComp.getCurProps()));
 					break;	
 				case CIRCLE:
-					drawingObjects.add(new Circle(e.x, e.y, getCurProps()));
+					drawingObjects.add(new Circle(e.x, e.y, propComp.getCurProps()));
 					break;
 				default:
 					break;
@@ -139,20 +106,12 @@ public class Pb {
 		
 		canvas.addMouseMoveListener(new MouseMoveListener() {
 			public void mouseMove(MouseEvent e) {
-				if (drawing != Drawing.NONE) {
+				if (drawingTool != DrawingTool.NONE) {
 					DrawingObject obj = drawingObjects.get(drawingObjects.size() - 1);
 					obj.draw(canvas, e.x, e.y);
 				}
 			}
 		});
-	}
-	
-	public Properties getCurProps() {
-		return new Properties(widthSel.getSelection(),
-							  fColorSel.getBackground(),
-							  bColorSel.getBackground(),
-							  30,
-							  30);
 	}
 	
 	public void paintAll() {
