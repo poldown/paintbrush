@@ -26,15 +26,23 @@ public class Rectangle implements DrawingObject {
 	public void draw(Canvas canvas, int x1, int y1) {
 		GC gc = new GC(canvas);
 		gc.setLineWidth(this.width);
-		gc.setForeground(canvas.getBackground());
-		gc.drawRectangle(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0);
+		drawRectangle(gc, canvas.getBackground(), canvas.getBackground());
 		if (x1 != -1 && y1 != -1) {
 			this.x1 = x1;
 			this.y1 = y1;
 		}
-		gc.setForeground(this.fColor);
-		gc.drawRectangle(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0);
+		drawRectangle(gc, this.fColor, this.bColor);
 		gc.dispose();
 	}
 
+	private void drawRectangle(GC gc, Color fColor, Color bColor) {
+		if (this.bColor != null) {
+			gc.setBackground(bColor);
+			gc.fillRectangle(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0);
+		}
+		if (this.fColor != null) {
+			gc.setForeground(fColor);
+			gc.drawRectangle(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0);
+		}
+	}
 }

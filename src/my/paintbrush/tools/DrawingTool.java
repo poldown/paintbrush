@@ -1,15 +1,17 @@
 package my.paintbrush.tools;
 
 public enum DrawingTool {
-	NONE("<none>"),
-	LINE("Line"),
-	RECTANGLE("Rectangle"),
-	ROUNDRECTANGLE("Round Rectangle"),
-	CIRCLE("Circle");
+	NONE("<none>", ""),
+	LINE("Line", "my.paintbrush.tools.Line"),
+	RECTANGLE("Rectangle", "my.paintbrush.tools.Rectangle"),
+	ROUNDRECTANGLE("Round Rectangle", "my.paintbrush.tools.RoundRectangle"),
+	ELLIPSE("Ellipse", "my.paintbrush.tools.Ellipse");
 	
 	public String disName;
+	public String className;
 	
-	DrawingTool(String disName) {
+	DrawingTool(String disName, String className) {
 		this.disName = disName;
+		this.className = className;
 	}
 }

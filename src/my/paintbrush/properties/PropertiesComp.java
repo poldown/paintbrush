@@ -28,14 +28,17 @@ public class PropertiesComp extends Composite {
 				new Color(Display.getCurrent(), 0, 0, 255),
 				30, 30);
 		
-		comp.setLayout(new GridLayout(1, false));
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		comp.setLayoutData(gridData);
+		this.setLayout(new GridLayout(3, false));
 		
-		widthSel = new Spinner(comp, SWT.NONE);
+		new Label(this, SWT.NONE).setText("Line width:");
+		
+		widthSel = new Spinner(this, SWT.NONE);
 		widthSel.setMinimum(1);
 		widthSel.setMaximum(50);
 		widthSel.setSelection(defaultProp.width);
+		GridData gridData = new GridData();
+		gridData.horizontalSpan = 2;
+		widthSel.setLayoutData(gridData);
 		
 		MouseListener colorSelMouseListener = new MouseAdapter() {
 			public void mouseDoubleClick(MouseEvent e) {
@@ -47,12 +50,16 @@ public class PropertiesComp extends Composite {
 			}
 		};
 		
-		fColorSel = new Canvas(comp, SWT.BORDER);
+		Label fColorSelLabel = new Label(this, SWT.NONE);
+		fColorSelLabel.setText("Foreground Color:");
+		fColorSelLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+		
+		fColorSel = new Canvas(this, SWT.BORDER);
 		fColorSel.setBackground(defaultProp.fColor);
 		fColorSel.setLayoutData(new GridData(50, 50));
 		fColorSel.addMouseListener(colorSelMouseListener);
 		
-		fColor_Transparent = new Button(comp, SWT.CHECK);
+		fColor_Transparent = new Button(this, SWT.CHECK);
 		fColor_Transparent.setText("Transparent");
 		fColor_Transparent.setSelection(false);
 		fColor_Transparent.addSelectionListener(new SelectionAdapter() {
@@ -61,25 +68,33 @@ public class PropertiesComp extends Composite {
 			}
 		});
 		
-		bColorSel = new Canvas(comp, SWT.BORDER);
+		Label bColorSelLabel = new Label(this, SWT.NONE);
+		bColorSelLabel.setText("Background Color:");
+		bColorSelLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+		
+		bColorSel = new Canvas(this, SWT.BORDER);
 		bColorSel.setBackground(defaultProp.bColor);
 		bColorSel.setLayoutData(new GridData(50, 50));
 		bColorSel.addMouseListener(colorSelMouseListener);
+		
+		bColor_Transparent = new Button(this, SWT.CHECK);
+		bColor_Transparent.setText("Transparent");
+		bColor_Transparent.setSelection(false);
 		bColor_Transparent.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				bColorSel.setEnabled(!bColor_Transparent.getSelection());
 			}
 		});
 		
-		bColor_Transparent = new Button(comp, SWT.CHECK);
-		bColor_Transparent.setText("Transparent");
-		bColor_Transparent.setSelection(false);
+		this.pack();
 	}
 	
 	public Properties getCurProps() {
 		return new Properties(widthSel.getSelection(),
-							  fColorSel.getBackground(),
-							  bColorSel.getBackground(),
+							  fColor_Transparent.getSelection()?
+									  null:fColorSel.getBackground(),
+							  bColor_Transparent.getSelection()?
+									  null:bColorSel.getBackground(),
 							  30,
 							  30);
 	}
