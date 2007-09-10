@@ -1,4 +1,4 @@
-package my.paintbrush;
+package my.paintbrush.tools;
 
 import org.eclipse.swt.widgets.Canvas;
 
