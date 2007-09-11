@@ -7,6 +7,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -83,10 +84,23 @@ public class PropertiesComp extends Composite {
 		bColor_Transparent.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				bColorSel.setEnabled(!bColor_Transparent.getSelection());
+				enableColorSel(bColorSel, !bColor_Transparent.getSelection());
 			}
 		});
 		
+		/*PBButton a = new PBButton(this, SWT.NONE);
+		a.setText("My");*/
+		
 		this.pack();
+	}
+	
+	private void enableColorSel(Canvas canvas, boolean enable) {
+		GC gc = new GC(canvas);
+		if (enable) {}
+			//Delete all
+		else {}
+			//Draw disabled
+		gc.dispose();
 	}
 	
 	public Properties getCurProps() {
