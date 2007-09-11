@@ -6,17 +6,16 @@ import my.paintbrush.tools.ToolSelector;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Shell;
 
 public class SWTContent {
 
-	protected Canvas canvas;
+	protected DrawingCanvas canvas;
 	protected ToolSelector toolSel;
 	protected PropertiesComp propComp;
 	
 	protected void createDrawingCanvas(Shell shell, int style) {
-		canvas = new Canvas(shell, style);
+		canvas = new DrawingCanvas(shell, style, this);
 		GridData gridData = new GridData(300, 300);
 		gridData.verticalSpan = 2;
 		canvas.setLayoutData(gridData);
