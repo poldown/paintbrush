@@ -5,7 +5,8 @@ public enum DrawingTool {
 	LINE("Line", "my.paintbrush.tools.Line"),
 	RECTANGLE("Rectangle", "my.paintbrush.tools.Rectangle"),
 	ROUNDRECTANGLE("Round Rectangle", "my.paintbrush.tools.RoundRectangle"),
-	ELLIPSE("Ellipse", "my.paintbrush.tools.Ellipse");
+	ELLIPSE("Ellipse", "my.paintbrush.tools.Ellipse"),
+	FREEDRAW("Free Drawing", "my.paintbrush.tools.FreeDraw");
 	
 	public String disName;
 	public String className;
