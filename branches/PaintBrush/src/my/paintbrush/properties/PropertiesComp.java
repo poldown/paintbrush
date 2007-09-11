@@ -8,6 +8,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Pattern;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -66,6 +67,7 @@ public class PropertiesComp extends Composite {
 		fColor_Transparent.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				fColorSel.setEnabled(!fColor_Transparent.getSelection());
+				enableColorSel(fColorSel, !fColor_Transparent.getSelection());
 			}
 		});
 		
@@ -96,9 +98,16 @@ public class PropertiesComp extends Composite {
 	
 	private void enableColorSel(Canvas canvas, boolean enable) {
 		GC gc = new GC(canvas);
-		if (enable) {}
-			//Delete all
-		else {}
+		if (enable) {
+			gc.setForeground(canvas.getBackground());
+			gc.fillRectangle(0, 0, canvas.getSize().x, canvas.getSize().y);
+		} else {
+			//gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+			//gc.fillRectangle(0, 0, canvas.getSize().x, canvas.getSize().y);
+			gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+			gc.drawLine(0, 0, 50, 50);
+			gc.drawLine(50, 0, 0, 50);
+		}
 			//Draw disabled
 		gc.dispose();
 	}
