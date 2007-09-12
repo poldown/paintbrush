@@ -24,17 +24,19 @@ public class Line implements DrawingObject {
 	}
 	
 	public void draw(Canvas canvas, int x1, int y1) {
-		GC gc = new GC(canvas);
-		gc.setLineWidth(this.width);
-		gc.setForeground(canvas.getBackground());
-		gc.drawLine(this.x0, this.y0, this.x1, this.y1);
-		if (x1 != -1 && y1 != -1) {
-			this.x1 = x1;
-			this.y1 = y1;
+		if (this.fColor != null) {
+			GC gc = new GC(canvas);
+			gc.setLineWidth(this.width);
+			gc.setForeground(canvas.getBackground());
+			gc.drawLine(this.x0, this.y0, this.x1, this.y1);
+			if (x1 != -1 && y1 != -1) {
+				this.x1 = x1;
+				this.y1 = y1;
+			}
+			gc.setForeground(this.fColor);
+			gc.drawLine(this.x0, this.y0, this.x1, this.y1);
+			gc.dispose();
 		}
-		gc.setForeground(this.fColor);
-		gc.drawLine(this.x0, this.y0, this.x1, this.y1);
-		gc.dispose();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import my.paintbrush.tools.DrawingObject;
 import my.paintbrush.tools.DrawingTool;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -13,6 +14,7 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class DrawingCanvas extends Canvas {
 
@@ -25,6 +27,7 @@ public class DrawingCanvas extends Canvas {
 	public DrawingCanvas (Composite parent, int style, SWTContent swt) {
 		super (parent, style);
 		this.swt = swt;
+		this.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		addDrawListener(this);
 	}
 	
