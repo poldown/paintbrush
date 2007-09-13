@@ -42,7 +42,6 @@ public class Shapes extends DrawingObject {
 			if (Math.asin((y0 - y1) / radius) > 0)
 				startAng = -startAng;
 			double jumps = (Math.PI * 2d) / (double)this.sidesNum;
-			System.out.println("radius: " + radius + " jumps: " + jumps);
 			for (int i = 0; i < this.sidesNum; i++) {
 				int x = x0 + (int)(radius * (Math.cos(startAng + jumps * i)));
 				int y = y0 + (int)(radius * (Math.sin(startAng + jumps * i)));
