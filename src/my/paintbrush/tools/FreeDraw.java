@@ -3,7 +3,7 @@ package my.paintbrush.tools;
 import java.util.ArrayList;
 import java.util.List;
 
-import my.paintbrush.properties.Properties;
+import my.paintbrush.properties.BasicProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -16,12 +16,11 @@ public class FreeDraw implements DrawingObject {
 	int width;
 	Color fColor, bColor;
 	
-	public FreeDraw(int x0, int y0, Properties prop) {
+	public FreeDraw(int x0, int y0, BasicProperties prop) {
 		points = new ArrayList<Point>();
 		points.add(new Point(x0, y0));
-		this.width = prop.width;
-		this.fColor = prop.fColor;
-		this.bColor = prop.bColor;
+		this.width = (Integer)prop.getProperty(BasicProperties.WIDTH);
+		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
 	public void draw(Canvas canvas, int x1, int y1) {
