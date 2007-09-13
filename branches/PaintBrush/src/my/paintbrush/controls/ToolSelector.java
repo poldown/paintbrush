@@ -1,9 +1,10 @@
-package my.paintbrush.tools;
+package my.paintbrush.controls;
 
 import java.lang.reflect.Constructor;
 
 import my.paintbrush.properties.Properties;
 import my.paintbrush.properties.Properties.PropertiesComp;
+import my.paintbrush.tools.DrawingTool;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -13,18 +14,21 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 
 public class ToolSelector extends Composite {
 
 	final DrawingTool defaultTool = DrawingTool.NONE;
 	
+	private Composite parent;
+	
 	private Combo toolSel;
+	private PbComposite propPbComp;
 	public PropertiesComp propComp;
 	
-	public ToolSelector(Shell shell, int style) {
-		super(shell, style);
+	public ToolSelector(Composite comp, int style, Composite parent) {
+		super(comp, style);
 		
+		this.parent = parent;
 		this.setLayout(new GridLayout(2, false));
 		
 		Label toolSelLabel = new Label(this, SWT.NONE);
@@ -37,23 +41,24 @@ public class ToolSelector extends Composite {
 		
 		toolSel.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				instatateTool(DrawingTool.values()
+				initiateTool(DrawingTool.values()
 						[toolSel.getSelectionIndex()]);
 			}
 		});
 		
 		toolSel.setText(defaultTool.disName);
-		instatateTool(defaultTool);
+		initiateTool(defaultTool);
 	}
 	
-	public void instatateTool(DrawingTool tool) {
-		if (propComp != null)
-			propComp.dispose();
+	public void initiateTool(DrawingTool tool) {
+		if (propPbComp != null)
+			propPbComp.dispose();
 		if (tool != DrawingTool.NONE)
-			createPropertiesComp(this, SWT.BORDER, 
+			createPropertiesComp(parent, SWT.BORDER, 
 					tool.propertiesClassName);
 		this.pack();
-		this.getParent().pack();
+		this.parent.pack();
+		this.parent.layout();
 	}
 	
 	public DrawingTool getSelectedTool() {
@@ -70,10 +75,12 @@ public class ToolSelector extends Composite {
 			if (prop != null) {
 				Constructor<? extends PropertiesComp> cons = 
 					prop.getClasses()[0].asSubclass(PropertiesComp.class).getConstructor(prop, Composite.class, Integer.TYPE);
-				propComp = cons.newInstance(prop.newInstance(), comp, style); 
-				GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
-				propComp.setLayoutData(gridData);
+				propPbComp = new PbComposite(comp, SWT.NONE, "Properties");
+				propComp = cons.newInstance(prop.newInstance(), propPbComp, style); 
+				GridData gridData = new GridData(SWT.CENTER, SWT.TOP, false, true);
+				propPbComp.setLayoutData(gridData);
 				propComp.pack();
+				propPbComp.pack();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

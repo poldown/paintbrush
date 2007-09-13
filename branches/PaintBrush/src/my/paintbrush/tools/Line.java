@@ -6,7 +6,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
 
-public class Line implements DrawingObject {
+public class Line extends DrawingObject {
 
 	int x0, y0;
 	int x1, y1;
@@ -37,5 +37,8 @@ public class Line implements DrawingObject {
 			gc.dispose();
 		}
 	}
-
+	
+	public String getInstructions() {
+		return "Draws lines";
+	}
 }
