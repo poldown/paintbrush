@@ -1,5 +1,6 @@
 package my.paintbrush.tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import my.paintbrush.properties.ShapesProperties;
@@ -32,7 +33,18 @@ public class Shapes implements DrawingObject {
 	public void draw(Canvas canvas, int x1, int y1) {
 		GC gc = new GC(canvas);
 		gc.setLineWidth(this.width);
-		drawShape(gc, canvas.getBackground(), canvas.getBackground());
+		if (this.points != null)
+			drawShape(gc, canvas.getBackground(), canvas.getBackground());
+		this.points = new ArrayList<Point>(this.sidesNum);
+		double radius = Math.sqrt(Math.pow((this.x1 - this.x0), 2) + Math.pow((this.y1 - this.y0), 2));
+		double startAng = 0d;
+		double jumps = Math.PI / this.sidesNum;
+		for (int i = 0; i < this.sidesNum; i++) {
+			int x = (int)(radius * (Math.cos(startAng + jumps * i)));
+			int y = (int)(radius * (Math.sin(startAng + jumps * i)));
+			Point point = new Point(x, y);
+			points.add(point);
+		}
 		if (x1 != -1 && y1 != -1) {
 			this.x1 = x1;
 			this.y1 = y1;
