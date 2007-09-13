@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Canvas;
 
-public class FreeDraw implements DrawingObject {
+public class FreeDraw extends DrawingObject {
 
 	List<Point> points;
 	int width;
@@ -40,7 +40,6 @@ public class FreeDraw implements DrawingObject {
 	
 	private int[] getIntArray(List<Point> list, int howMany) {
 		int[] intArr = new int[howMany * 2];
-		System.out.println("howMany: " + howMany + " list size: " + list.size());
 		for (int i = 0; i < (howMany * 2); i += 2) {
 			intArr[i] = list.get(list.size() - howMany + i / 2).x;
 			intArr[i + 1] = list.get(list.size() - howMany + i / 2).y;
@@ -48,4 +47,7 @@ public class FreeDraw implements DrawingObject {
 		return intArr;
 	}
 
+	public String getInstructions() {
+		return "Free drawing";
+	}
 }

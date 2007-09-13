@@ -6,7 +6,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
 
-public class RoundRectangle implements DrawingObject {
+public class RoundRectangle extends DrawingObject {
 
 	int x0, y0;
 	int x1, y1;
@@ -47,5 +47,9 @@ public class RoundRectangle implements DrawingObject {
 			gc.setForeground(fColor);
 			gc.drawRoundRectangle(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0, this.arcW, this.arcH);
 		}
+	}
+	
+	public String getInstructions() {
+		return "Draws round rectangles";
 	}
 }

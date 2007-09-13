@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Canvas;
 
-public class Shapes implements DrawingObject {
+public class Shapes extends DrawingObject {
 
 	int x0, y0;
 	int x1, y1;
@@ -33,19 +33,22 @@ public class Shapes implements DrawingObject {
 	public void draw(Canvas canvas, int x1, int y1) {
 		GC gc = new GC(canvas);
 		gc.setLineWidth(this.width);
-		if (this.points != null)
-			drawShape(gc, canvas.getBackground(), canvas.getBackground());
-		this.points = new ArrayList<Point>(this.sidesNum);
-		double radius = Math.sqrt(Math.pow((this.x1 - this.x0), 2) + Math.pow((this.y1 - this.y0), 2));
-		double startAng = 0d;
-		double jumps = Math.PI / this.sidesNum;
-		for (int i = 0; i < this.sidesNum; i++) {
-			int x = (int)(radius * (Math.cos(startAng + jumps * i)));
-			int y = (int)(radius * (Math.sin(startAng + jumps * i)));
-			Point point = new Point(x, y);
-			points.add(point);
-		}
 		if (x1 != -1 && y1 != -1) {
+			if (this.points != null)
+				drawShape(gc, canvas.getBackground(), canvas.getBackground());
+			this.points = new ArrayList<Point>(this.sidesNum);
+			double radius = Math.sqrt(Math.pow((x1 - this.x0), 2) + Math.pow((y1 - this.y0), 2));
+			double startAng = Math.acos((x1 - x0) / radius);
+			if (Math.asin((y0 - y1) / radius) > 0)
+				startAng = -startAng;
+			double jumps = (Math.PI * 2d) / (double)this.sidesNum;
+			System.out.println("radius: " + radius + " jumps: " + jumps);
+			for (int i = 0; i < this.sidesNum; i++) {
+				int x = x0 + (int)(radius * (Math.cos(startAng + jumps * i)));
+				int y = y0 + (int)(radius * (Math.sin(startAng + jumps * i)));
+				Point point = new Point(x, y);
+				points.add(point);
+			}
 			this.x1 = x1;
 			this.y1 = y1;
 		}
@@ -71,5 +74,10 @@ public class Shapes implements DrawingObject {
 			intArr[i + 1] = list.get(list.size() - howMany + i / 2).y;
 		}
 		return intArr;
+	}
+	
+	public String getInstructions() {
+		return "Draws shapes. Change the 'Number of sides' parameter " +
+				"to specify how many sides should the shape have.";
 	}
 }

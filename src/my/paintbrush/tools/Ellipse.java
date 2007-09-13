@@ -6,7 +6,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
 
-public class Ellipse implements DrawingObject {
+public class Ellipse extends DrawingObject {
 
 	int x0, y0;
 	int x1, y1;
@@ -44,5 +44,9 @@ public class Ellipse implements DrawingObject {
 			gc.setForeground(fColor);
 			gc.drawArc(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0, 0, 360);
 		}
+	}
+	
+	public String getInstructions() {
+		return "Draws ellipses";
 	}
 }

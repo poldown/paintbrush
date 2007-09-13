@@ -6,7 +6,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
 
-public class Rectangle implements DrawingObject {
+public class Rectangle extends DrawingObject {
 
 	int x0, y0;
 	int x1, y1;
@@ -44,5 +44,9 @@ public class Rectangle implements DrawingObject {
 			gc.setForeground(fColor);
 			gc.drawRectangle(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0);
 		}
+	}
+	
+	public String getInstructions() {
+		return "Draws rectangles";
 	}
 }

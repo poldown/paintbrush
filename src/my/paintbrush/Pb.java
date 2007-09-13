@@ -10,7 +10,7 @@ public class Pb {
 		Display display = new Display();
 		Shell shell = new Shell(display);
 		swt = new SWTContent(shell);
-		shell.pack(true);
+		shell.pack();
 		shell.open();
 		
 		while (!shell.isDisposed())
