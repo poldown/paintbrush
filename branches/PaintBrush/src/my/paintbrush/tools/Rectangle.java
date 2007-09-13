@@ -1,6 +1,6 @@
 package my.paintbrush.tools;
 
-import my.paintbrush.properties.Properties;
+import my.paintbrush.properties.SimpleProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -13,14 +13,14 @@ public class Rectangle implements DrawingObject {
 	int width;
 	Color bColor, fColor;
 	
-	public Rectangle(int x0, int y0, Properties prop) {
+	public Rectangle(int x0, int y0, SimpleProperties prop) {
 		this.x0 = x0;
 		this.y0 = y0;
 		this.x1 = x0;
 		this.y1 = y0;
-		this.width = prop.width;
-		this.fColor = prop.fColor;
-		this.bColor = prop.bColor;
+		this.width = (Integer)prop.getProperty(SimpleProperties.WIDTH);
+		this.fColor = (Color)prop.getProperty(SimpleProperties.FCOLOR);
+		this.bColor = (Color)prop.getProperty(SimpleProperties.BCOLOR);
 	}
 	
 	public void draw(Canvas canvas, int x1, int y1) {

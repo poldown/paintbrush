@@ -1,6 +1,6 @@
 package my.paintbrush.tools;
 
-import my.paintbrush.properties.Properties;
+import my.paintbrush.properties.RoundRectangleProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -14,16 +14,16 @@ public class RoundRectangle implements DrawingObject {
 	Color fColor, bColor;
 	int arcW, arcH;
 	
-	public RoundRectangle(int x0, int y0, Properties prop) {
+	public RoundRectangle(int x0, int y0, RoundRectangleProperties prop) {
 		this.x0 = x0;
 		this.y0 = y0;
 		this.x1 = x0;
 		this.y1 = y0;
-		this.width = prop.width;
-		this.fColor = prop.fColor;
-		this.bColor = prop.bColor;
-		this.arcW = prop.arcW;
-		this.arcH = prop.arcH;
+		this.width = (Integer)prop.getProperty(RoundRectangleProperties.WIDTH);
+		this.fColor = (Color)prop.getProperty(RoundRectangleProperties.FCOLOR);
+		this.bColor = (Color)prop.getProperty(RoundRectangleProperties.BCOLOR);
+		this.arcW = (Integer)prop.getProperty(RoundRectangleProperties.ARCW);
+		this.arcH = (Integer)prop.getProperty(RoundRectangleProperties.ARCH);
 	}
 	
 	public void draw(Canvas canvas, int x1, int y1) {

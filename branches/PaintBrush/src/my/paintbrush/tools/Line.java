@@ -1,6 +1,6 @@
 package my.paintbrush.tools;
 
-import my.paintbrush.properties.Properties;
+import my.paintbrush.properties.BasicProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -13,14 +13,13 @@ public class Line implements DrawingObject {
 	int width;
 	Color fColor, bColor;
 	
-	public Line(int x0, int y0, Properties prop) {
+	public Line(int x0, int y0, BasicProperties prop) {
 		this.x0 = x0;
 		this.y0 = y0;	
 		this.x1 = x0;
 		this.y1 = y0;
-		this.width = prop.width;
-		this.fColor = prop.fColor;
-		this.bColor = prop.bColor;
+		this.width = (Integer)prop.getProperty(BasicProperties.WIDTH);
+		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
 	public void draw(Canvas canvas, int x1, int y1) {

@@ -41,16 +41,14 @@ public class DrawingCanvas extends Canvas {
 				drawingTool = swt.toolSel.getSelectedTool();
 				if (drawingTool != DrawingTool.NONE) {
 					try {
-						Class tool = Class.forName(drawingTool.className);
+						Class<? extends DrawingObject> tool = Class.forName(drawingTool.className).asSubclass(DrawingObject.class);
 						@SuppressWarnings("unchecked")
-						Constructor<DrawingObject> cons = tool.getConstructor(new Class[] {
+						Constructor<? extends DrawingObject> cons = tool.getConstructor(
 								Integer.TYPE,
 								Integer.TYPE,
-								my.paintbrush.properties.Properties.class
-						});
-						drawingObjects.add(cons.newInstance(new Object[] {
-								e.x, e.y, swt.propComp.getCurProps()
-						}));
+								Class.forName(drawingTool.propertiesClassName));
+						drawingObjects.add(cons.newInstance(e.x, e.y, 
+								swt.toolSel.propComp.getCurProps()));
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}

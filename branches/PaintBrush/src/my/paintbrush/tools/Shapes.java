@@ -2,7 +2,7 @@ package my.paintbrush.tools;
 
 import java.util.List;
 
-import my.paintbrush.properties.Properties;
+import my.paintbrush.properties.ShapesProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -13,20 +13,20 @@ public class Shapes implements DrawingObject {
 
 	int x0, y0;
 	int x1, y1;
+	int sidesNum;
 	List<Point> points;
 	int width;
 	Color bColor, fColor;
 	
-	public Shapes(int x0, int y0, Properties prop) {
+	public Shapes(int x0, int y0, ShapesProperties prop) {
 		this.x0 = x0;
 		this.y0 = y0;
 		this.x1 = x0;
 		this.y1 = y0;
-		//Add handling of the type of the shape (properties
-		//should be updated)
-		this.width = prop.width;
-		this.fColor = prop.fColor;
-		this.bColor = prop.bColor;
+		this.width = (Integer)prop.getProperty(ShapesProperties.WIDTH);
+		this.fColor = (Color)prop.getProperty(ShapesProperties.FCOLOR);
+		this.bColor = (Color)prop.getProperty(ShapesProperties.BCOLOR);
+		this.sidesNum = (Integer)prop.getProperty(ShapesProperties.SIDESNUM);
 	}
 	
 	public void draw(Canvas canvas, int x1, int y1) {

@@ -1,6 +1,5 @@
 package my.paintbrush;
 
-import my.paintbrush.properties.PropertiesComp;
 import my.paintbrush.tools.ToolSelector;
 
 import org.eclipse.swt.SWT;
@@ -12,7 +11,6 @@ public class SWTContent {
 
 	protected DrawingCanvas canvas;
 	protected ToolSelector toolSel;
-	protected PropertiesComp propComp;
 	
 	protected void createDrawingCanvas(Shell shell, int style) {
 		canvas = new DrawingCanvas(shell, style, this);
@@ -26,16 +24,10 @@ public class SWTContent {
 		//toolSel.setSelection(new Point(1, 1));
 	}
 	
-	protected void createPropertiesComp(Shell shell, int style) {
-		propComp = new PropertiesComp(shell, style); 
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		propComp.setLayoutData(gridData);
-	}
-	
 	protected SWTContent(final Shell shell) {
 		shell.setLayout(new GridLayout(2, false));
 		createDrawingCanvas(shell, SWT.BORDER);
 		createToolSelector(shell, SWT.NONE);
-		createPropertiesComp(shell, SWT.BORDER);
+		//createPropertiesComp(shell, SWT.BORDER);
 	}
 }

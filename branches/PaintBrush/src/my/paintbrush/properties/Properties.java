@@ -1,18 +1,42 @@
 package my.paintbrush.properties;
 
-import org.eclipse.swt.graphics.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class Properties {
+import org.eclipse.swt.widgets.Composite;
 
-	public int width;
-	public Color fColor, bColor;
-	public int arcW, arcH;
+public abstract class Properties {
 	
-	public Properties(int width, Color fColor, Color bColor, int arcW, int arcH) {
-		this.width = width;
-		this.fColor = fColor;
-		this.bColor = bColor;
-		this.arcW = arcW;
-		this.arcH = arcH;
+	public Property[] properties;
+	
+	public Properties(Property... properties) {
+		this.properties = properties;
+	}
+	
+	public Properties() {}
+	
+	public Object getProperty(String propertyName) {
+		for (Property prop : properties)
+			if (prop.name.equals(propertyName))
+				return prop.value;
+		return null;
+	}
+	
+	public Property[] addProperties(Property[] to, Property... what) {
+		List<Property> retProperties = new ArrayList<Property>(Arrays.asList(to));
+		for (Property count : what)
+			retProperties.add(count);
+		return (Property[])(retProperties.toArray(new Property[0]));
+	}
+	
+	abstract public Property[] getProperties();
+	
+	public abstract class PropertiesComp extends Composite {
+		public PropertiesComp(final Composite comp, int style) {
+			super(comp, style);
+		};
+		
+		public abstract Properties getCurProps();
 	}
 }
