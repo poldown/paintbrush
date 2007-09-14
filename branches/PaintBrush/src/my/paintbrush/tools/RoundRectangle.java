@@ -8,8 +8,6 @@ import org.eclipse.swt.widgets.Canvas;
 
 public class RoundRectangle extends DrawingObject {
 
-	int x0, y0;
-	int x1, y1;
 	int width;
 	Color fColor, bColor;
 	int arcW, arcH;

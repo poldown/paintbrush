@@ -7,6 +7,9 @@ import org.eclipse.swt.widgets.Canvas;
 
 public abstract class DrawingObject {
 	
+	int x0, y0;
+	int x1, y1;
+	
 	public abstract void draw(Canvas canvas, int x1, int y1);
 	
 	public PbMouseListener getPbMouseListener() {
