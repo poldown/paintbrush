@@ -36,11 +36,11 @@ public class Ellipse extends DrawingObject {
 	private void drawCircle(GC gc, Color bColor, Color fColor) {
 		if (this.bColor != null) {
 			gc.setBackground(bColor);
-			gc.fillArc(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0, 0, 360);
+			gc.fillOval(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0);
 		}
 		if (this.fColor != null) {
 			gc.setForeground(fColor);
-			gc.drawArc(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0, 0, 360);
+			gc.drawOval(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0);
 		}
 	}
 	
