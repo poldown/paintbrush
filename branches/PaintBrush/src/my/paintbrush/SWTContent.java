@@ -20,7 +20,7 @@ public class SWTContent {
 	protected void createDrawingCanvas(Shell shell, int style) {
 		PbComposite pbComposite = new PbComposite(shell, SWT.NONE, "Drawing Canvas");
 		canvas = new DrawingCanvas(pbComposite, style, this);
-		canvas.setLayoutData(new GridData(300, 300));
+		canvas.setLayoutData(new GridData(600, 600));
 		GridData gridData = new GridData();
 		gridData.verticalSpan = 4;
 		pbComposite.setLayoutData(gridData);
