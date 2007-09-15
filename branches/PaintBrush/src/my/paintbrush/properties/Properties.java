@@ -16,9 +16,9 @@ public abstract class Properties {
 	
 	public Properties() {}
 	
-	public Object getProperty(String propertyName) {
+	public Object getProperty(Property findProperty) {
 		for (Property prop : properties)
-			if (prop.name.equals(propertyName))
+			if (prop.name.equals(findProperty.name))
 				return prop.value;
 		return null;
 	}

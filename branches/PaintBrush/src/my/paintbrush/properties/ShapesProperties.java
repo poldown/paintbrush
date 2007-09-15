@@ -7,7 +7,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
 public class ShapesProperties extends SimpleProperties {
-	public static final String SIDESNUM = "sidesNum";
+	public static final Property SIDESNUM = new Property("sidesNum",
+			3);
 	
 	public ShapesProperties(Property... properties) {
 		super(properties);
@@ -17,8 +18,7 @@ public class ShapesProperties extends SimpleProperties {
 	
 	@Override
 	public Property[] getProperties() {
-		return addProperties(super.getProperties(),
-							 new Property(SIDESNUM));
+		return addProperties(super.getProperties(), SIDESNUM);
 	}
 	
 	public class ShapesPropertiesComp extends SimplePropertiesComp {
@@ -27,15 +27,12 @@ public class ShapesProperties extends SimpleProperties {
 		public ShapesPropertiesComp(final Composite comp, int style) {
 			super(comp, style);
 			
-			BasicProperties defaultProp = new BasicProperties(
-					new Property(SIDESNUM, 3));
-			
 			new Label(this, SWT.NONE).setText("Number of sides:");
 			
 			sidesNumSel = new Spinner(this, SWT.NONE);
 			sidesNumSel.setMinimum(3);
 			sidesNumSel.setMaximum(50);
-			sidesNumSel.setSelection((Integer)defaultProp.getProperty(SIDESNUM));
+			sidesNumSel.setSelection((Integer)SIDESNUM.value);
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
 			sidesNumSel.setLayoutData(gridData);
@@ -45,7 +42,7 @@ public class ShapesProperties extends SimpleProperties {
 		public Properties getCurProps() {
 			return new ShapesProperties(
 					addProperties(super.getCurProps().properties,
-							new Property(SIDESNUM, sidesNumSel.getSelection())));
+							SIDESNUM.newWithValue(sidesNumSel.getSelection())));
 		}
 	}
 }

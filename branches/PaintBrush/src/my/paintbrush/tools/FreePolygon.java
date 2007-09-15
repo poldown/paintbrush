@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Canvas;
 public class FreePolygon extends DrawingObject {
 
 	int width;
+	int[] lineDash;
 	Color fColor, bColor;
 	List<Point> points;
 	
@@ -26,6 +27,7 @@ public class FreePolygon extends DrawingObject {
 		this.points = new ArrayList<Point>();
 		this.points.add(new Point(x0, y0));
 		this.width = (Integer)prop.getProperty(SimpleProperties.WIDTH);
+		this.lineDash = (int[])prop.getProperty(SimpleProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(SimpleProperties.FCOLOR);
 		this.bColor = (Color)prop.getProperty(SimpleProperties.BCOLOR);
 	}
@@ -34,6 +36,7 @@ public class FreePolygon extends DrawingObject {
 		if (this.fColor != null) {
 			GC gc = new GC(canvas);
 			gc.setLineWidth(this.width);
+			gc.setLineDash(this.lineDash);
 			int[] intArr = getIntArray(points, points.size());
 			int[] newIntArr = new int[intArr.length + 2];
 			for (int i = 0; i < intArr.length; i++)

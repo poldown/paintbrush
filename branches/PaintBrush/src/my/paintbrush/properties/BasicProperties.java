@@ -3,7 +3,6 @@ package my.paintbrush.properties;
 import my.paintbrush.controls.ImageCombo;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -21,13 +20,28 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 
 public class BasicProperties extends Properties {
 
-	public static final String WIDTH = "width";
-	public static final String FCOLOR = "fColor";
-	public static final String LINEDASH = "lineDash";
+	public static final Property WIDTH = new Property(
+			"width", 3);
+	public static final Property FCOLOR = new Property(
+			"fColor", Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+	public static final Property LINEDASH = new Property(
+			"lineDash", null);
+	
+	private int[][] dashes = new int[][] {
+			null,
+			new int[] {1},
+			new int[] {5},
+			new int[] {2, 3},
+			new int[] {5, 1},
+			new int[] {1, 1, 2, 1},
+			new int[] {2, 2, 4, 2},
+			new int[] {4, 2, 2, 2, 2, 2}
+	};
 	
 	public BasicProperties(Property... properties) {
 		super(properties);
@@ -36,9 +50,7 @@ public class BasicProperties extends Properties {
 	public BasicProperties() {}
 	
 	public Property[] getProperties() {
-		return new Property[] {	
-				new Property(WIDTH),
-				new Property(FCOLOR)}; 
+		return new Property[] {WIDTH, FCOLOR, LINEDASH}; 
 	}
 	
 	public class BasicPropertiesComp extends PropertiesComp {
@@ -51,41 +63,48 @@ public class BasicProperties extends Properties {
 		public BasicPropertiesComp(final Composite comp, int style) {
 			super(comp, style);
 			
-			BasicProperties defaultProp = new BasicProperties(
-					new Property(WIDTH, 3),
-					new Property(FCOLOR, 
-						Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
-			
 			this.setLayout(new GridLayout(3, false));
 			
+			addWidthSel();
+			addLineDashSel();
+			addFColorSel();
+		}
+		
+		private void addWidthSel() {
 			new Label(this, SWT.NONE).setText("Line width:");
 			
 			widthSel = new Spinner(this, SWT.NONE);
 			widthSel.setMinimum(1);
 			widthSel.setMaximum(50);
-			widthSel.setSelection((Integer)defaultProp.getProperty(WIDTH));
+			widthSel.setSelection((Integer)WIDTH.value);
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
 			widthSel.setLayoutData(gridData);
+		}
+		
+		private void addLineDashSel() {
+			Label lineDashSelLabel = new Label(this, SWT.NONE);
+			lineDashSelLabel.setText("Line Style:");
+			lineDashSelLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 			
-			MouseListener colorSelMouseListener = new MouseAdapter() {
-				public void mouseDoubleClick(MouseEvent e) {
-					ColorDialog dialog = new ColorDialog(comp.getShell());
-					dialog.setRGB(((Canvas)e.getSource()).getBackground().getRGB());
-					RGB selRGB = dialog.open();
-					if (selRGB != null)
-						((Canvas)e.getSource()).setBackground(new Color(Display.getCurrent(), selRGB));
-				}
-			};
-			
+			lineDashSel = new ImageCombo(this, SWT.FLAT);
+			for (int[] dash : dashes)
+				addLineDashItem(dash);
+			lineDashSel.select(getLineDashIndex((int[])LINEDASH.value));
+			GridData gridData = new GridData();
+			gridData.horizontalSpan = 2;
+			lineDashSel.setLayoutData(gridData);
+		}
+		
+		private void addFColorSel() {
 			Label fColorSelLabel = new Label(this, SWT.NONE);
 			fColorSelLabel.setText("Foreground Color:");
 			fColorSelLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 			
 			fColorSel = new Canvas(this, SWT.BORDER);
-			fColorSel.setBackground((Color)defaultProp.getProperty(FCOLOR));
+			fColorSel.setBackground((Color)FCOLOR.value);
 			fColorSel.setLayoutData(new GridData(50, 50));
-			fColorSel.addMouseListener(colorSelMouseListener);
+			fColorSel.addMouseListener(getColSelMouseListener(this.getShell()));
 			
 			fColor_Transparent = new Button(this, SWT.CHECK);
 			fColor_Transparent.setText("Transparent");
@@ -96,20 +115,23 @@ public class BasicProperties extends Properties {
 					enableColorSel(fColorSel, !fColor_Transparent.getSelection());
 				}
 			});
-			
-			lineDashSel = new ImageCombo(this, SWT.FLAT);
-			int[][] dashes = new int[][] {
-					null,
-					new int[] {1},
-					new int[] {5},
-					new int[] {2, 3},
-					new int[] {5, 1},
-					new int[] {1, 1, 2, 1},
-					new int[] {2, 2, 4, 2},
-					new int[] {4, 2, 2, 2, 2, 2}
-			};
-			for (int[] dash : dashes)
-				addLineDashItem(dash);
+		}
+		
+		private int getLineDashIndex(int[] lineDash) {
+			for (int i = 0; i < dashes.length; i++) {
+				if (dashes[i] == null) {
+					if (lineDash == null) return i;
+				} else {
+					if (lineDash.length != dashes[i].length) continue;
+					boolean lineDashEquals = true;
+					for (int j = 0; j < dashes[i].length; j++) {
+						if (dashes[i][j] != lineDash[j])
+							lineDashEquals = false;
+					}
+					if (lineDashEquals) return i;
+				}
+			}
+			return -1;
 		}
 		
 		private void addLineDashItem(int[] dashes) {
@@ -120,6 +142,18 @@ public class BasicProperties extends Properties {
 			gc.drawLine(0, 8, 100, 8);
 			gc.dispose();
 			lineDashSel.add(image);
+		}
+		
+		private MouseListener getColSelMouseListener(final Shell shell) {
+			return new MouseAdapter() {
+				public void mouseDoubleClick(MouseEvent e) {
+					ColorDialog dialog = new ColorDialog(shell);
+					dialog.setRGB(((Canvas)e.getSource()).getBackground().getRGB());
+					RGB selRGB = dialog.open();
+					if (selRGB != null)
+						((Canvas)e.getSource()).setBackground(new Color(Display.getCurrent(), selRGB));
+				}
+			};
 		}
 		
 		protected void enableColorSel(Canvas canvas, boolean enable) {
@@ -140,9 +174,10 @@ public class BasicProperties extends Properties {
 		
 		public Properties getCurProps() {
 			return new BasicProperties(
-					new Property(WIDTH, widthSel.getSelection()),
-					new Property(FCOLOR, fColor_Transparent.getSelection()?
-						null:fColorSel.getBackground()));
+					WIDTH.newWithValue(widthSel.getSelection()),
+					FCOLOR.newWithValue(fColor_Transparent.getSelection()?
+						null:fColorSel.getBackground()),
+					LINEDASH.newWithValue(dashes[lineDashSel.getSelectionIndex()]));
 		}
 	}
 }

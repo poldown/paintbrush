@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Canvas;
 public class RoundRectangle extends DrawingObject {
 
 	int width;
+	int[] lineDash;
 	Color fColor, bColor;
 	int arcW, arcH;
 	
@@ -18,6 +19,7 @@ public class RoundRectangle extends DrawingObject {
 		this.x1 = x0;
 		this.y1 = y0;
 		this.width = (Integer)prop.getProperty(RoundRectangleProperties.WIDTH);
+		this.lineDash = (int[])prop.getProperty(RoundRectangleProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(RoundRectangleProperties.FCOLOR);
 		this.bColor = (Color)prop.getProperty(RoundRectangleProperties.BCOLOR);
 		this.arcW = (Integer)prop.getProperty(RoundRectangleProperties.ARCW);
@@ -27,6 +29,7 @@ public class RoundRectangle extends DrawingObject {
 	public void draw(Canvas canvas, int x1, int y1) {
 		GC gc = new GC(canvas);
 		gc.setLineWidth(this.width);
+		gc.setLineDash(this.lineDash);
 		drawRoundRectangle(gc, canvas.getBackground(), canvas.getBackground());
 		if (x1 != -1 && y1 != -1) {
 			this.x1 = x1;

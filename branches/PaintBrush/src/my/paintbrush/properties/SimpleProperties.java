@@ -15,10 +15,12 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 
 public class SimpleProperties extends BasicProperties {
 
-	public static final String BCOLOR = "bColor";
+	public static final Property BCOLOR = new Property(
+			"bColor", Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
 	
 	public SimpleProperties(Property... properties) {
 		super(properties);
@@ -27,7 +29,7 @@ public class SimpleProperties extends BasicProperties {
 	public SimpleProperties() {}
 	
 	public Property[] getProperties() {
-		return addProperties(super.getProperties(), new Property(BCOLOR)); 
+		return addProperties(super.getProperties(), BCOLOR); 
 	}
 	
 	public class SimplePropertiesComp extends BasicPropertiesComp {
@@ -38,28 +40,14 @@ public class SimpleProperties extends BasicProperties {
 		public SimplePropertiesComp(final Composite comp, int style) {
 			super(comp, style);
 			
-			SimpleProperties defaultProp = new SimpleProperties(
-					new Property(BCOLOR, 
-						Display.getCurrent().getSystemColor(SWT.COLOR_BLUE)));
-			
-			MouseListener colorSelMouseListener = new MouseAdapter() {
-				public void mouseDoubleClick(MouseEvent e) {
-					ColorDialog dialog = new ColorDialog(comp.getShell());
-					dialog.setRGB(((Canvas)e.getSource()).getBackground().getRGB());
-					RGB selRGB = dialog.open();
-					if (selRGB != null)
-						((Canvas)e.getSource()).setBackground(new Color(Display.getCurrent(), selRGB));
-				}
-			};
-			
 			Label bColorSelLabel = new Label(this, SWT.NONE);
 			bColorSelLabel.setText("Background Color:");
 			bColorSelLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 			
 			bColorSel = new Canvas(this, SWT.BORDER);
-			bColorSel.setBackground((Color)defaultProp.getProperty(BCOLOR));
+			bColorSel.setBackground((Color)BCOLOR.value);
 			bColorSel.setLayoutData(new GridData(50, 50));
-			bColorSel.addMouseListener(colorSelMouseListener);
+			bColorSel.addMouseListener(getColSelMouseListener(comp.getShell()));
 			
 			bColor_Transparent = new Button(this, SWT.CHECK);
 			bColor_Transparent.setText("Transparent");
@@ -75,10 +63,22 @@ public class SimpleProperties extends BasicProperties {
 			a.setText("My");*/
 		}
 		
+		private MouseListener getColSelMouseListener(final Shell shell) {
+			return new MouseAdapter() {
+				public void mouseDoubleClick(MouseEvent e) {
+					ColorDialog dialog = new ColorDialog(shell);
+					dialog.setRGB(((Canvas)e.getSource()).getBackground().getRGB());
+					RGB selRGB = dialog.open();
+					if (selRGB != null)
+						((Canvas)e.getSource()).setBackground(new Color(Display.getCurrent(), selRGB));
+				}
+			};
+		}
+		
 		public Properties getCurProps() {
 			return new SimpleProperties(
 					addProperties(super.getCurProps().properties, 
-						new Property(BCOLOR, bColor_Transparent.getSelection()?
+						BCOLOR.newWithValue(bColor_Transparent.getSelection()?
 							null:bColorSel.getBackground())));
 		}
 	}
