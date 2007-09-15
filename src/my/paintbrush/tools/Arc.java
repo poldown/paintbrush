@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Canvas;
 public class Arc extends DrawingObject {
 
 	int width;
+	int[] lineDash;
 	Color fColor, bColor;
 	
 	public Arc(int x0, int y0, BasicProperties prop) {
@@ -17,6 +18,7 @@ public class Arc extends DrawingObject {
 		this.x1 = x0;
 		this.y1 = y0;
 		this.width = (Integer)prop.getProperty(BasicProperties.WIDTH);
+		this.lineDash = (int[])prop.getProperty(BasicProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
@@ -24,6 +26,7 @@ public class Arc extends DrawingObject {
 		if (this.fColor != null) {
 			GC gc = new GC(canvas);
 			gc.setLineWidth(this.width);
+			gc.setLineDash(this.lineDash);
 			gc.setForeground(canvas.getBackground());
 			gc.drawArc(this.x0, this.y0, this.x1, this.y1, 30, 30);
 			if (x1 != -1 && y1 != -1) {

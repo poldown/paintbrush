@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Canvas;
 public class Line extends DrawingObject {
 
 	int width;
+	int[] lineDash;
 	Color fColor, bColor;
 	/*Image image;
 	Path path;*/
@@ -19,6 +20,7 @@ public class Line extends DrawingObject {
 		this.x1 = x0;
 		this.y1 = y0;
 		this.width = (Integer)prop.getProperty(BasicProperties.WIDTH);
+		this.lineDash = (int[])prop.getProperty(BasicProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
@@ -26,6 +28,7 @@ public class Line extends DrawingObject {
 		if (this.fColor != null) {
 			GC gc = new GC(canvas);
 			gc.setLineWidth(this.width);
+			gc.setLineDash(this.lineDash);
 			/*if (image != null && path != null) {
 				//Path path = new Path(Display.getCurrent());
 				//path.moveTo(x0, y0);

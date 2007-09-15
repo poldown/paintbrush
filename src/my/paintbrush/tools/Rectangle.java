@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Canvas;
 public class Rectangle extends DrawingObject {
 
 	int width;
+	int[] lineDash;
 	Color bColor, fColor;
 	
 	public Rectangle(int x0, int y0, SimpleProperties prop) {
@@ -17,6 +18,7 @@ public class Rectangle extends DrawingObject {
 		this.x1 = x0;
 		this.y1 = y0;
 		this.width = (Integer)prop.getProperty(SimpleProperties.WIDTH);
+		this.lineDash = (int[])prop.getProperty(SimpleProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(SimpleProperties.FCOLOR);
 		this.bColor = (Color)prop.getProperty(SimpleProperties.BCOLOR);
 	}
@@ -24,6 +26,7 @@ public class Rectangle extends DrawingObject {
 	public void draw(Canvas canvas, int x1, int y1) {
 		GC gc = new GC(canvas);
 		gc.setLineWidth(this.width);
+		gc.setLineDash(this.lineDash);
 		drawRectangle(gc, canvas.getBackground(), canvas.getBackground());
 		if (x1 != -1 && y1 != -1) {
 			this.x1 = x1;

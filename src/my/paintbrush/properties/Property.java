@@ -17,4 +17,8 @@ public class Property {
 		//this.type = null;
 		this.value = null;
 	}
+	
+	public Property newWithValue(Object value) {
+		return new Property(this.name, value);
+	}
 }

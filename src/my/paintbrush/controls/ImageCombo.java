@@ -1045,7 +1045,7 @@ public void select (int index) {
     }
     if (0 <= index && index < table.getItemCount()) {
         if (index != getSelectionIndex()) {
-            text.setText (table.getItem (index).getText());
+            text.setImage (table.getItem (index).getImage());
             table.select (index);
             table.showSelection ();
         }

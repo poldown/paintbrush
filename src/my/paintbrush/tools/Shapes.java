@@ -15,6 +15,7 @@ public class Shapes extends DrawingObject {
 	int sidesNum;
 	List<Point> points;
 	int width;
+	int[] lineDash;
 	Color bColor, fColor;
 	
 	public Shapes(int x0, int y0, ShapesProperties prop) {
@@ -23,6 +24,7 @@ public class Shapes extends DrawingObject {
 		this.x1 = x0;
 		this.y1 = y0;
 		this.width = (Integer)prop.getProperty(ShapesProperties.WIDTH);
+		this.lineDash = (int[])prop.getProperty(ShapesProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(ShapesProperties.FCOLOR);
 		this.bColor = (Color)prop.getProperty(ShapesProperties.BCOLOR);
 		this.sidesNum = (Integer)prop.getProperty(ShapesProperties.SIDESNUM);
@@ -31,6 +33,7 @@ public class Shapes extends DrawingObject {
 	public void draw(Canvas canvas, int x1, int y1) {
 		GC gc = new GC(canvas);
 		gc.setLineWidth(this.width);
+		gc.setLineDash(this.lineDash);
 		if (x1 != -1 && y1 != -1) {
 			if (this.points != null)
 				drawShape(gc, canvas.getBackground(), canvas.getBackground());
