@@ -1,6 +1,9 @@
 package my.paintbrush.properties;
 
+import my.paintbrush.controls.ImageCombo;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -8,6 +11,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -23,6 +27,7 @@ public class BasicProperties extends Properties {
 
 	public static final String WIDTH = "width";
 	public static final String FCOLOR = "fColor";
+	public static final String LINEDASH = "lineDash";
 	
 	public BasicProperties(Property... properties) {
 		super(properties);
@@ -41,6 +46,7 @@ public class BasicProperties extends Properties {
 		private Canvas fColorSel;
 		private Button fColor_Transparent;
 		private Spinner widthSel;
+		private ImageCombo lineDashSel;
 		
 		public BasicPropertiesComp(final Composite comp, int style) {
 			super(comp, style);
@@ -90,6 +96,30 @@ public class BasicProperties extends Properties {
 					enableColorSel(fColorSel, !fColor_Transparent.getSelection());
 				}
 			});
+			
+			lineDashSel = new ImageCombo(this, SWT.FLAT);
+			int[][] dashes = new int[][] {
+					null,
+					new int[] {1},
+					new int[] {5},
+					new int[] {2, 3},
+					new int[] {5, 1},
+					new int[] {1, 1, 2, 1},
+					new int[] {2, 2, 4, 2},
+					new int[] {4, 2, 2, 2, 2, 2}
+			};
+			for (int[] dash : dashes)
+				addLineDashItem(dash);
+		}
+		
+		private void addLineDashItem(int[] dashes) {
+			Image image = new Image(Display.getCurrent(), 100, 15);
+			GC gc = new GC(image);
+			gc.setLineWidth(widthSel.getSelection());
+			gc.setLineDash(dashes);
+			gc.drawLine(0, 8, 100, 8);
+			gc.dispose();
+			lineDashSel.add(image);
 		}
 		
 		protected void enableColorSel(Canvas canvas, boolean enable) {
