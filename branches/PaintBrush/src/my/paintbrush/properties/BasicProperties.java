@@ -6,6 +6,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -19,6 +21,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
@@ -42,6 +45,8 @@ public class BasicProperties extends Properties {
 			new int[] {2, 2, 4, 2},
 			new int[] {4, 2, 2, 2, 2, 2}
 	};
+	
+	private final colorSelPaintListener;
 	
 	public BasicProperties(Property... properties) {
 		super(properties);
@@ -156,20 +161,17 @@ public class BasicProperties extends Properties {
 			};
 		}
 		
-		protected void enableColorSel(Canvas canvas, boolean enable) {
-			GC gc = new GC(canvas);
+		protected void enableColorSel(final Canvas canvas, final boolean enable) {
 			if (enable) {
+				canvas.removeP
+				GC gc = new GC(canvas);
 				gc.setForeground(canvas.getBackground());
 				gc.fillRectangle(0, 0, canvas.getSize().x, canvas.getSize().y);
+				gc.dispose();
 			} else {
-				//gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-				//gc.fillRectangle(0, 0, canvas.getSize().x, canvas.getSize().y);
-				gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-				gc.drawLine(0, 0, 50, 50);
-				gc.drawLine(50, 0, 0, 50);
+				canvas.addPaintListener();
+				canvas.notifyListeners(SWT.Paint, new Event());
 			}
-				//Draw disabled
-			gc.dispose();
 		}
 		
 		public Properties getCurProps() {
