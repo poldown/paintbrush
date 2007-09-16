@@ -24,39 +24,48 @@ public class RoundRectangleProperties extends SimpleProperties {
 	}
 	
 	public class RoundRectanglePropertiesComp extends SimplePropertiesComp {
-		private Spinner ArcWidthSel;
-		private Spinner ArcHeightSel;
+		private Spinner arcWidthSel;
+		private Spinner arcHeightSel;
 		
 		public RoundRectanglePropertiesComp(final Composite comp, int style) {
 			super(comp, style);
 			
+			arcWidthSel = addArcWidthSel();
+			arcHeightSel = addArcHeightSel();
+		}
+		
+		private Spinner addArcWidthSel() {
 			new Label(this, SWT.NONE).setText("Arc width:");
 			
-			ArcWidthSel = new Spinner(this, SWT.NONE);
-			ArcWidthSel.setMinimum(1);
-			ArcWidthSel.setMaximum(360);
-			ArcWidthSel.setSelection((Integer)ARCW.value);
+			Spinner arcWidthSel = new Spinner(this, SWT.NONE);
+			arcWidthSel.setMinimum(1);
+			arcWidthSel.setMaximum(360);
+			arcWidthSel.setSelection((Integer)ARCW.value);
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
-			ArcWidthSel.setLayoutData(gridData);
-			
+			arcWidthSel.setLayoutData(gridData);
+			return arcWidthSel;
+		}
+		
+		private Spinner addArcHeightSel() {
 			new Label(this, SWT.NONE).setText("Arc height:");
 			
-			ArcHeightSel = new Spinner(this, SWT.NONE);
-			ArcHeightSel.setMinimum(1);
-			ArcHeightSel.setMaximum(360);
-			ArcHeightSel.setSelection((Integer)ARCH.value);
-			gridData = new GridData();
+			Spinner arcHeightSel = new Spinner(this, SWT.NONE);
+			arcHeightSel.setMinimum(1);
+			arcHeightSel.setMaximum(360);
+			arcHeightSel.setSelection((Integer)ARCH.value);
+			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
-			ArcHeightSel.setLayoutData(gridData);
+			arcHeightSel.setLayoutData(gridData);
+			return arcHeightSel;
 		}
 		
 		@Override
 		public Properties getCurProps() {
 			return new RoundRectangleProperties(
 					addProperties(super.getCurProps().properties,
-							ARCW.newWithValue(ArcWidthSel.getSelection()),
-							ARCH.newWithValue(ArcHeightSel.getSelection())));
+							ARCW.newWithValue(arcWidthSel.getSelection()),
+							ARCH.newWithValue(arcHeightSel.getSelection())));
 		}
 	}
 }

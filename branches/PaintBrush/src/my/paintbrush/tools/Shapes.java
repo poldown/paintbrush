@@ -19,10 +19,7 @@ public class Shapes extends DrawingObject {
 	Color bColor, fColor;
 	
 	public Shapes(int x0, int y0, ShapesProperties prop) {
-		this.x0 = x0;
-		this.y0 = y0;
-		this.x1 = x0;
-		this.y1 = y0;
+		super(x0, y0, prop);
 		this.width = (Integer)prop.getProperty(ShapesProperties.WIDTH);
 		this.lineDash = (int[])prop.getProperty(ShapesProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(ShapesProperties.FCOLOR);

@@ -13,10 +13,7 @@ public class Ellipse extends DrawingObject {
 	Color fColor, bColor;
 	
 	public Ellipse(int x0, int y0, SimpleProperties prop) {
-		this.x0 = x0;
-		this.y0 = y0;
-		this.x1 = x0;
-		this.y1 = y0;
+		super(x0, y0, prop);
 		this.width = (Integer)prop.getProperty(SimpleProperties.WIDTH);
 		this.lineDash = (int[])prop.getProperty(SimpleProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(SimpleProperties.FCOLOR);
