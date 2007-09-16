@@ -27,15 +27,20 @@ public class ShapesProperties extends SimpleProperties {
 		public ShapesPropertiesComp(final Composite comp, int style) {
 			super(comp, style);
 			
+			sidesNumSel = addSidesNumSel();
+		}
+		
+		private Spinner addSidesNumSel() {
 			new Label(this, SWT.NONE).setText("Number of sides:");
 			
-			sidesNumSel = new Spinner(this, SWT.NONE);
+			Spinner sidesNumSel = new Spinner(this, SWT.NONE);
 			sidesNumSel.setMinimum(3);
 			sidesNumSel.setMaximum(50);
 			sidesNumSel.setSelection((Integer)SIDESNUM.value);
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
 			sidesNumSel.setLayoutData(gridData);
+			return sidesNumSel;
 		}
 		
 		@Override

@@ -20,10 +20,7 @@ public class FreePolygon extends DrawingObject {
 	List<Point> points;
 	
 	public FreePolygon(int x0, int y0, SimpleProperties prop) {
-		this.x0 = x0;
-		this.y0 = y0;	
-		this.x1 = x0;
-		this.y1 = y0;
+		super(x0, y0, prop);
 		this.points = new ArrayList<Point>();
 		this.points.add(new Point(x0, y0));
 		this.width = (Integer)prop.getProperty(SimpleProperties.WIDTH);

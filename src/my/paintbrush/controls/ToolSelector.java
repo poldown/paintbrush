@@ -3,6 +3,7 @@ package my.paintbrush.controls;
 import java.lang.reflect.Constructor;
 
 import my.paintbrush.properties.Properties;
+import my.paintbrush.properties.Property;
 import my.paintbrush.properties.Properties.PropertiesComp;
 import my.paintbrush.tools.DrawingTool;
 
@@ -24,6 +25,7 @@ public class ToolSelector extends Composite {
 	private Combo toolSel;
 	private PbComposite propPbComp;
 	public PropertiesComp propComp;
+	private Properties propInstance;
 	
 	public ToolSelector(Composite comp, int style, Composite parent) {
 		super(comp, style);
@@ -51,11 +53,12 @@ public class ToolSelector extends Composite {
 	}
 	
 	public void initiateTool(DrawingTool tool) {
-		if (propPbComp != null)
-			propPbComp.dispose();
 		if (tool != DrawingTool.NONE)
 			createPropertiesComp(parent, SWT.BORDER, 
 					tool.propertiesClassName);
+		else
+			if (propPbComp != null)
+				propPbComp.dispose();
 		this.pack();
 		this.parent.pack();
 		this.parent.layout();
@@ -68,15 +71,38 @@ public class ToolSelector extends Composite {
 		else
 			return DrawingTool.values()[index];
 	}
-	
+
 	protected void createPropertiesComp(Composite comp, int style, String propClass) {
 		try {
+			//Get the class of the (parent) Properties class
 			Class<? extends Properties> prop = Class.forName(propClass).asSubclass(Properties.class);
 			if (prop != null) {
-				Constructor<? extends PropertiesComp> cons = 
+				//Create the Properties class' instance
+				if (propInstance != null && !propPbComp.isDisposed()) {
+					//If an instance was created earlier - get the
+					//current properties and create a new instance
+					//using the special constructor with the Property[]
+					//param (passing the current properties to the
+					//constructor)
+					Property[] props = propComp.getCurProps().properties;
+					Constructor<? extends Properties> propCons = prop.getConstructor(Property[].class);
+					propInstance = propCons.newInstance(new Object[] {props});
+				} else
+					//If no instance was created earlier - create it
+					//with the default constructor (no need to pass
+					//any current properties)
+					propInstance = prop.newInstance();
+				//Drill down and get the first subclass inside the
+				//Properties class - this is the PropertiesComp class.
+				//Then -> get its appropriate constructor.
+				Constructor<? extends PropertiesComp> propCompCons = 
 					prop.getClasses()[0].asSubclass(PropertiesComp.class).getConstructor(prop, Composite.class, Integer.TYPE);
+				//If a properties composite is already visible, dispose
+				if (propPbComp != null)
+					propPbComp.dispose();
+				//Create a new properties composite
 				propPbComp = new PbComposite(comp, SWT.NONE, "Properties");
-				propComp = cons.newInstance(prop.newInstance(), propPbComp, style); 
+				propComp = propCompCons.newInstance(propInstance, propPbComp, style); 
 				GridData gridData = new GridData(SWT.CENTER, SWT.TOP, false, true);
 				propPbComp.setLayoutData(gridData);
 				propComp.pack();

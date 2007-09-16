@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.*;
 
 public class Pb {
 	
+	@SuppressWarnings("unused")
 	private SWTContent swt;
 	
 	public Pb() {

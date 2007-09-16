@@ -15,10 +15,7 @@ public class Line extends DrawingObject {
 	Path path;*/
 	
 	public Line(int x0, int y0, BasicProperties prop) {
-		this.x0 = x0;
-		this.y0 = y0;	
-		this.x1 = x0;
-		this.y1 = y0;
+		super(x0, y0, prop);
 		this.width = (Integer)prop.getProperty(BasicProperties.WIDTH);
 		this.lineDash = (int[])prop.getProperty(BasicProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);

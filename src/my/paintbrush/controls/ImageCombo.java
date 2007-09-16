@@ -63,7 +63,7 @@ import org.eclipse.swt.widgets.Widget;
  */
 public final class ImageCombo extends Composite {
 
-    Label text;
+    Label label;
     Table table;
     int visibleItemCount = 5;
     Shell popup;
@@ -107,9 +107,9 @@ public ImageCombo (Composite parent, int style) {
     int textStyle = SWT.SINGLE;
     if ((style & SWT.READ_ONLY) != 0) textStyle |= SWT.READ_ONLY;
     if ((style & SWT.FLAT) != 0) textStyle |= SWT.FLAT;
-    text = new Label (this, SWT.NONE);
-    text.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
-    text.setAlignment(SWT.CENTER);
+    label = new Label (this, textStyle);
+    label.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+    label.setAlignment(SWT.CENTER);
     int arrowStyle = SWT.ARROW | SWT.DOWN;
     if ((style & SWT.FLAT) != 0) arrowStyle |= SWT.FLAT;
     arrow = new Button (this, arrowStyle);
@@ -120,8 +120,8 @@ public ImageCombo (Composite parent, int style) {
                 popupEvent (event);
                 return;
             }
-            if (text == event.widget) {
-                textEvent (event);
+            if (label == event.widget) {
+                labelEvent (event);
                 return;
             }
             if (table == event.widget) {
@@ -153,8 +153,8 @@ public ImageCombo (Composite parent, int style) {
     int [] comboEvents = {SWT.Dispose, SWT.Move, SWT.Resize};
     for (int i=0; i<comboEvents.length; i++) this.addListener (comboEvents [i], listener);
     
-    int [] textEvents = {SWT.KeyDown, SWT.KeyUp, SWT.Modify, SWT.MouseDown, SWT.MouseUp, SWT.Traverse, SWT.FocusIn};
-    for (int i=0; i<textEvents.length; i++) text.addListener (textEvents [i], listener);
+    int [] labelEvents = {SWT.Modify, SWT.MouseDown, SWT.MouseUp, SWT.Traverse, SWT.FocusIn};
+    for (int i=0; i<labelEvents.length; i++) label.addListener (labelEvents [i], listener);
     
     int [] arrowEvents = {SWT.Selection, SWT.FocusIn};
     for (int i=0; i<arrowEvents.length; i++) arrow.addListener (arrowEvents [i], listener);
@@ -315,7 +315,7 @@ void comboEvent (Event event) {
             Display display = getDisplay ();
             display.removeFilter (SWT.FocusIn, filter);
             popup = null;  
-            text = null;  
+            label = null;  
             table = null;  
             arrow = null;
             break;
@@ -333,13 +333,13 @@ public Point computeSize (int wHint, int hHint, boolean changed) {
     int width = 0, height = 0;
     String[] items = getStringsFromTable();
     int textWidth = 0;
-    GC gc = new GC (text);
+    GC gc = new GC (label);
     int spacer = gc.stringExtent (" ").x; //$NON-NLS-1$
     for (int i = 0; i < items.length; i++) {
         textWidth = Math.max (gc.stringExtent (items[i]).x, textWidth);
     }
     gc.dispose();
-    Point textSize = text.computeSize (SWT.DEFAULT, SWT.DEFAULT, changed);
+    Point textSize = label.computeSize (SWT.DEFAULT, SWT.DEFAULT, changed);
     Point arrowSize = arrow.computeSize (SWT.DEFAULT, SWT.DEFAULT, changed);
     Point listSize = table.computeSize (wHint, SWT.DEFAULT, changed);
     int borderWidth = getBorderWidth ();
@@ -408,10 +408,10 @@ void dropDown (boolean drop) {
     if (!drop) {
         popup.setVisible (false);
         if (!isDisposed ()&& arrow.isFocusControl()) {
-            text.setFocus();
+            label.setFocus();
         }
         if (getSelectionIndex() != -1)
-        	text.setImage(table.getItem(getSelectionIndex()).getImage());
+        	label.setImage(table.getItem(getSelectionIndex()).getImage());
         return;
     }
 
@@ -587,9 +587,9 @@ public int getStyle () {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
  */
-public String getText () {
+public String getLabel () {
     checkWidget ();
-    return text.getText ();
+    return label.getText ();
 }
 /**
  * Gets the number of items that are visible in the drop
@@ -627,7 +627,7 @@ void handleFocus (int type) {
         case SWT.FocusOut: {
             if (!hasFocus) return;
             Control focusControl = getDisplay ().getFocusControl ();
-            if (focusControl == arrow || focusControl == table || focusControl == text) return;
+            if (focusControl == arrow || focusControl == table || focusControl == label) return;
             hasFocus = false;
             Shell shell = getShell ();
             shell.removeListener(SWT.Deactivate, listener);
@@ -692,7 +692,7 @@ void initAccessible() {
         }
     };
     getAccessible ().addAccessibleListener (accessibleAdapter);
-    text.getAccessible ().addAccessibleListener (accessibleAdapter);
+    label.getAccessible ().addAccessibleListener (accessibleAdapter);
     table.getAccessible ().addAccessibleListener (accessibleAdapter);
     
     arrow.getAccessible ().addAccessibleListener (new AccessibleAdapter() {
@@ -743,11 +743,11 @@ void initAccessible() {
         }
 
         public void getValue (AccessibleControlEvent e) {
-            e.result = getText ();
+            e.result = getLabel ();
         }
     });
 
-    text.getAccessible ().addAccessibleControlListener (new AccessibleControlAdapter () {
+    label.getAccessible ().addAccessibleControlListener (new AccessibleControlAdapter () {
         public void getRole (AccessibleControlEvent e) {
             e.detail = ACC.ROLE_LABEL;
         }
@@ -764,7 +764,7 @@ boolean isDropped () {
 }
 public boolean isFocusControl () {
     checkWidget();
-    if (text.isFocusControl () || arrow.isFocusControl () || table.isFocusControl () || popup.isFocusControl ()) {
+    if (label.isFocusControl () || arrow.isFocusControl () || table.isFocusControl () || popup.isFocusControl ()) {
         return true;
     } 
     return super.isFocusControl ();
@@ -775,7 +775,7 @@ void internalLayout (boolean changed) {
     int width = rect.width;
     int height = rect.height;
     Point arrowSize = arrow.computeSize (SWT.DEFAULT, height, changed);
-    text.setBounds (0, 0, width - arrowSize.x, height);
+    label.setBounds (0, 0, width - arrowSize.x, height);
     arrow.setBounds (width - arrowSize.x, 0, arrowSize.x, arrowSize.y);
 }
 void listEvent (Event event) {
@@ -801,7 +801,7 @@ void listEvent (Event event) {
         case SWT.Selection: {
             int index = table.getSelectionIndex ();
             if (index == -1) return;
-            text.setText (table.getItem (index).getText());
+            label.setText (table.getItem (index).getText());
             table.setSelection (index);
             Event e = new Event ();
             e.time = event.time;
@@ -891,7 +891,7 @@ void popupEvent(Event event) {
 }
 public void redraw () {
     super.redraw();
-    text.redraw();
+    label.redraw();
     arrow.redraw();
     if (popup.isVisible()) table.redraw();
 }
@@ -976,7 +976,7 @@ public void remove (String string) {
  */
 public void removeAll () {
     checkWidget();
-    text.setText (""); //$NON-NLS-1$
+    label.setText (""); //$NON-NLS-1$
     table.removeAll ();
 }
 /**
@@ -1040,12 +1040,12 @@ public void select (int index) {
     checkWidget();
     if (index == -1) {
         table.deselectAll ();
-        text.setText (""); //$NON-NLS-1$
+        label.setText (""); //$NON-NLS-1$
         return;
     }
     if (0 <= index && index < table.getItemCount()) {
         if (index != getSelectionIndex()) {
-            text.setImage (table.getItem (index).getImage());
+            label.setImage (table.getItem (index).getImage());
             table.select (index);
             table.showSelection ();
         }
@@ -1054,31 +1054,31 @@ public void select (int index) {
 public void setBackground (Color color) {
     super.setBackground(color);
     background = color;
-    if (text != null) text.setBackground(color);
+    if (label != null) label.setBackground(color);
     if (table != null) table.setBackground(color);
     if (arrow != null) arrow.setBackground(color);
 }
 public void setEnabled (boolean enabled) {
     super.setEnabled(enabled);
     if (popup != null) popup.setVisible (false);
-    if (text != null) text.setEnabled(enabled);
+    if (label != null) label.setEnabled(enabled);
     if (arrow != null) arrow.setEnabled(enabled);
 }
 public boolean setFocus () {
     checkWidget();
-    return text.setFocus ();
+    return label.setFocus ();
 }
 public void setFont (Font font) {
     super.setFont (font);
     this.font = font;
-    text.setFont (font);
+    label.setFont (font);
     table.setFont (font);
     internalLayout (true);
 }
 public void setForeground (Color color) {
     super.setForeground(color);
     foreground = color;
-    if (text != null) text.setForeground(color);
+    if (label != null) label.setForeground(color);
     if (table != null) table.setForeground(color);
     if (arrow != null) arrow.setForeground(color);
 }
@@ -1180,10 +1180,10 @@ public void setText (String string) {
     }
     if (index == -1) {
         table.deselectAll ();
-        text.setText (string);
+        label.setText (string);
         return;
     }
-    text.setText (string);
+    label.setText (string);
     table.setSelection (index);
     table.showSelection ();
 }
@@ -1192,7 +1192,7 @@ public void setToolTipText (String string) {
     checkWidget();
     super.setToolTipText(string);
     arrow.setToolTipText (string);
-    text.setToolTipText (string);       
+    label.setToolTipText (string);       
 }
 
 public void setVisible (boolean visible) {
@@ -1230,7 +1230,7 @@ String stripMnemonic (String string) {
     } while (index < length);
     return string;
 }
-void textEvent (Event event) {
+void labelEvent (Event event) {
     switch (event.type) {
         case SWT.FocusIn: {
             handleFocus (SWT.FocusIn);

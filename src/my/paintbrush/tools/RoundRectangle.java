@@ -14,10 +14,7 @@ public class RoundRectangle extends DrawingObject {
 	int arcW, arcH;
 	
 	public RoundRectangle(int x0, int y0, RoundRectangleProperties prop) {
-		this.x0 = x0;
-		this.y0 = y0;
-		this.x1 = x0;
-		this.y1 = y0;
+		super(x0, y0, prop);
 		this.width = (Integer)prop.getProperty(RoundRectangleProperties.WIDTH);
 		this.lineDash = (int[])prop.getProperty(RoundRectangleProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(RoundRectangleProperties.FCOLOR);

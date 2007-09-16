@@ -18,6 +18,7 @@ public class FreeDraw extends DrawingObject {
 	Color fColor, bColor;
 	
 	public FreeDraw(int x0, int y0, BasicProperties prop) {
+		super(x0, y0, prop);
 		points = new ArrayList<Point>();
 		points.add(new Point(x0, y0));
 		this.width = (Integer)prop.getProperty(BasicProperties.WIDTH);

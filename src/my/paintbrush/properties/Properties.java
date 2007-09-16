@@ -12,6 +12,13 @@ public abstract class Properties {
 	
 	public Properties(Property... properties) {
 		this.properties = properties;
+		//Update the current properties by the given properties
+		//(containing the properties of the previous active tool)
+		for (Property prop : getProperties()) {
+			Object foundPropVal = getProperty(prop);
+			if (foundPropVal != null)
+				prop.value = foundPropVal;
+		}
 	}
 	
 	public Properties() {}

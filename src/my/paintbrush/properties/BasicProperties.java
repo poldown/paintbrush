@@ -46,8 +46,6 @@ public class BasicProperties extends Properties {
 			new int[] {4, 2, 2, 2, 2, 2}
 	};
 	
-	private final colorSelPaintListener;
-	
 	public BasicProperties(Property... properties) {
 		super(properties);
 	}
@@ -70,56 +68,66 @@ public class BasicProperties extends Properties {
 			
 			this.setLayout(new GridLayout(3, false));
 			
-			addWidthSel();
-			addLineDashSel();
-			addFColorSel();
+			widthSel = addWidthSel();
+			lineDashSel = addLineDashSel();
+			fColorSel = addColorSel("Foreground Color:", (Color)FCOLOR.value);
+			fColor_Transparent = addColorTransSel(fColorSel);
 		}
 		
-		private void addWidthSel() {
+		private Spinner addWidthSel() {
 			new Label(this, SWT.NONE).setText("Line width:");
 			
-			widthSel = new Spinner(this, SWT.NONE);
+			Spinner widthSel = new Spinner(this, SWT.NONE);
 			widthSel.setMinimum(1);
 			widthSel.setMaximum(50);
 			widthSel.setSelection((Integer)WIDTH.value);
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
 			widthSel.setLayoutData(gridData);
+			return widthSel;
 		}
 		
-		private void addLineDashSel() {
+		private ImageCombo addLineDashSel() {
 			Label lineDashSelLabel = new Label(this, SWT.NONE);
 			lineDashSelLabel.setText("Line Style:");
 			lineDashSelLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 			
-			lineDashSel = new ImageCombo(this, SWT.FLAT);
+			ImageCombo lineDashSel = new ImageCombo(this, SWT.FLAT);
 			for (int[] dash : dashes)
-				addLineDashItem(dash);
+				lineDashSel.add(getLineDashImage(dash));
 			lineDashSel.select(getLineDashIndex((int[])LINEDASH.value));
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
 			lineDashSel.setLayoutData(gridData);
+			return lineDashSel;
 		}
 		
-		private void addFColorSel() {
-			Label fColorSelLabel = new Label(this, SWT.NONE);
-			fColorSelLabel.setText("Foreground Color:");
-			fColorSelLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+		protected Canvas addColorSel(String labelText, Color initialColor) {
+			Label colorSelLabel = new Label(this, SWT.NONE);
+			colorSelLabel.setText(labelText);
+			colorSelLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 			
-			fColorSel = new Canvas(this, SWT.BORDER);
-			fColorSel.setBackground((Color)FCOLOR.value);
-			fColorSel.setLayoutData(new GridData(50, 50));
-			fColorSel.addMouseListener(getColSelMouseListener(this.getShell()));
-			
-			fColor_Transparent = new Button(this, SWT.CHECK);
-			fColor_Transparent.setText("Transparent");
-			fColor_Transparent.setSelection(false);
-			fColor_Transparent.addSelectionListener(new SelectionAdapter() {
+			Canvas colorSel = new Canvas(this, SWT.BORDER);
+			colorSel.setBackground(initialColor);
+			colorSel.setLayoutData(new GridData(50, 50));
+			colorSel.addMouseListener(getColSelMouseListener(this.getShell()));
+			return colorSel;
+		}
+		
+		protected Button addColorTransSel(final Canvas colorSel) {
+			//TODO: BUG! Transparancy isn't related to any property
+			//		causing a new created tool to lose its previous
+			//		state.
+			final Button color_Transparency = new Button(this, SWT.CHECK);
+			color_Transparency.setText("Transparent");
+			color_Transparency.setSelection(false);
+			color_Transparency.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
-					fColorSel.setEnabled(!fColor_Transparent.getSelection());
-					enableColorSel(fColorSel, !fColor_Transparent.getSelection());
+					colorSel.setEnabled(!color_Transparency.getSelection());
+					enableColorSel(colorSel, !color_Transparency.getSelection());
 				}
 			});
+			return color_Transparency;
 		}
 		
 		private int getLineDashIndex(int[] lineDash) {
@@ -139,14 +147,14 @@ public class BasicProperties extends Properties {
 			return -1;
 		}
 		
-		private void addLineDashItem(int[] dashes) {
+		private Image getLineDashImage(int[] dashes) {
 			Image image = new Image(Display.getCurrent(), 100, 15);
 			GC gc = new GC(image);
 			gc.setLineWidth(widthSel.getSelection());
 			gc.setLineDash(dashes);
 			gc.drawLine(0, 8, 100, 8);
 			gc.dispose();
-			lineDashSel.add(image);
+			return image;
 		}
 		
 		private MouseListener getColSelMouseListener(final Shell shell) {
@@ -161,17 +169,30 @@ public class BasicProperties extends Properties {
 			};
 		}
 		
-		protected void enableColorSel(final Canvas canvas, final boolean enable) {
-			if (enable) {
-				canvas.removeP
-				GC gc = new GC(canvas);
-				gc.setForeground(canvas.getBackground());
-				gc.fillRectangle(0, 0, canvas.getSize().x, canvas.getSize().y);
-				gc.dispose();
-			} else {
-				canvas.addPaintListener();
-				canvas.notifyListeners(SWT.Paint, new Event());
-			}
+		protected void enableColorSel(final Canvas canvas, boolean enable) {
+			final String enabledKey = "enabled";
+			final String enabled = "true";
+			final String disabled = "false";
+			
+			if (canvas.getData(enabledKey) == null)
+				canvas.addPaintListener(new PaintListener() {
+					public void paintControl(PaintEvent e) {
+						GC gc = new GC(canvas);
+						if (canvas.getData(enabledKey).equals(enabled)) {
+							gc.setForeground(canvas.getBackground());
+							gc.fillRectangle(0, 0, canvas.getSize().x, canvas.getSize().y);
+						} else if (canvas.getData(enabledKey).equals(disabled)) {
+							//gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+							//gc.fillRectangle(0, 0, canvas.getSize().x, canvas.getSize().y);
+							gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+							gc.drawLine(0, 0, 50, 50);
+							gc.drawLine(50, 0, 0, 50);
+						}
+						gc.dispose();
+					}
+				});
+			canvas.setData(enabledKey, enable?enabled:disabled);
+			canvas.notifyListeners(SWT.Paint, new Event());
 		}
 		
 		public Properties getCurProps() {

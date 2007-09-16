@@ -26,7 +26,7 @@ public class DrawingCanvas extends Canvas {
 	
 	private SWTContent swt;
 	
-	private Canvas canvas2;
+	/*private Canvas canvas2;*/
 	
 	public DrawingCanvas (Composite parent, int style, SWTContent swt) {
 		super (parent, style);
