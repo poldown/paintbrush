@@ -1,4 +1,4 @@
-package my.paintbrush.properties;
+package my.paintbrush.Properties;
 
 public class Property {
 

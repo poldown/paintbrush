@@ -1,8 +1,8 @@
 package my.paintbrush;
 
-import my.paintbrush.controls.DrawingCanvas;
-import my.paintbrush.controls.PbComposite;
-import my.paintbrush.controls.ToolSelector;
+import my.paintbrush.Controls.DrawingCanvas;
+import my.paintbrush.Controls.PbComposite;
+import my.paintbrush.Controls.ToolSelector;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

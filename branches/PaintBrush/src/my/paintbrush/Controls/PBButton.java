@@ -1,4 +1,4 @@
-package my.paintbrush.controls;
+package my.paintbrush.Controls;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;

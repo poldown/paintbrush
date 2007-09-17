@@ -1,6 +1,6 @@
-package my.paintbrush.properties;
+package my.paintbrush.Properties;
 
-import my.paintbrush.controls.ImageCombo;
+import my.paintbrush.Controls.ImageCombo;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;

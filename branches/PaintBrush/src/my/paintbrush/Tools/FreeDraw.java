@@ -1,10 +1,10 @@
-package my.paintbrush.tools;
+package my.paintbrush.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import my.paintbrush.PointsManager.PbPoint;
-import my.paintbrush.properties.BasicProperties;
+import my.paintbrush.Properties.BasicProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;

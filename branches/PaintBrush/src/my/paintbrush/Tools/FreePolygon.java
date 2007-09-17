@@ -1,12 +1,12 @@
-package my.paintbrush.tools;
+package my.paintbrush.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
-import my.paintbrush.controls.PbMouseListener;
-import my.paintbrush.properties.SimpleProperties;
+import my.paintbrush.Controls.PbMouseListener;
+import my.paintbrush.Properties.SimpleProperties;
 
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;

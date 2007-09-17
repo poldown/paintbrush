@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import my.paintbrush.PbException;
-import my.paintbrush.tools.DrawingObject;
+import my.paintbrush.Tools.DrawingObject;
 
 public class PointsManager {
 

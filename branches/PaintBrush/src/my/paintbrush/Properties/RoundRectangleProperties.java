@@ -1,4 +1,4 @@
-package my.paintbrush.properties;
+package my.paintbrush.Properties;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

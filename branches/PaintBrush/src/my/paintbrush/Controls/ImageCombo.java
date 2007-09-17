@@ -9,7 +9,7 @@
  *     IBM Corporation - initial API and implementation
  *     Tom Seidel      - enhancements for image-handling
  *******************************************************************************/
-package my.paintbrush.controls;
+package my.paintbrush.Controls;
 
 
 import java.util.Arrays;
