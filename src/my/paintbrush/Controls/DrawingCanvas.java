@@ -1,4 +1,4 @@
-package my.paintbrush.controls;
+package my.paintbrush.Controls;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -8,8 +8,8 @@ import my.paintbrush.SWTContent;
 import my.paintbrush.PointsManager.IDGenerator;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
-import my.paintbrush.tools.DrawingObject;
-import my.paintbrush.tools.DrawingTool;
+import my.paintbrush.Tools.DrawingObject;
+import my.paintbrush.Tools.DrawingTool;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;

@@ -1,6 +1,6 @@
-package my.paintbrush.tools;
+package my.paintbrush.Tools;
 
-import my.paintbrush.properties.RoundRectangleProperties;
+import my.paintbrush.Properties.RoundRectangleProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;

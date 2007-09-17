@@ -1,11 +1,11 @@
-package my.paintbrush.controls;
+package my.paintbrush.Controls;
 
 import java.lang.reflect.Constructor;
 
-import my.paintbrush.properties.Properties;
-import my.paintbrush.properties.Property;
-import my.paintbrush.properties.Properties.PropertiesComp;
-import my.paintbrush.tools.DrawingTool;
+import my.paintbrush.Properties.Properties;
+import my.paintbrush.Properties.Property;
+import my.paintbrush.Properties.Properties.PropertiesComp;
+import my.paintbrush.Tools.DrawingTool;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

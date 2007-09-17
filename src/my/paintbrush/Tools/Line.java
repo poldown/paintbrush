@@ -1,7 +1,7 @@
-package my.paintbrush.tools;
+package my.paintbrush.Tools;
 
 import my.paintbrush.PointsManager.PointsManager;
-import my.paintbrush.properties.BasicProperties;
+import my.paintbrush.Properties.BasicProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;

@@ -1,6 +1,6 @@
-package my.paintbrush.tools;
+package my.paintbrush.Tools;
 
-import my.paintbrush.properties.SimpleProperties;
+import my.paintbrush.Properties.SimpleProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;

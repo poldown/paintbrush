@@ -1,8 +1,8 @@
-package my.paintbrush.tools;
+package my.paintbrush.Tools;
 
 import my.paintbrush.PointsManager.PointsManager;
-import my.paintbrush.controls.PbMouseListener;
-import my.paintbrush.properties.Properties;
+import my.paintbrush.Controls.PbMouseListener;
+import my.paintbrush.Properties.Properties;
 
 import org.eclipse.swt.widgets.Canvas;
 

@@ -1,4 +1,4 @@
-package my.paintbrush.controls;
+package my.paintbrush.Controls;
 
 import my.paintbrush.SWTContent;
 
