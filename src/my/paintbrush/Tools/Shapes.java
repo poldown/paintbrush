@@ -8,8 +8,8 @@ import my.paintbrush.PointsManager.PointsManager;
 import my.paintbrush.Properties.ShapesProperties;
 
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Canvas;
 
 public class Shapes extends DrawingObject {
 
@@ -28,14 +28,14 @@ public class Shapes extends DrawingObject {
 		this.sidesNum = (Integer)prop.getProperty(ShapesProperties.SIDESNUM);
 	}
 	
-	public void draw(Canvas canvas, int x1, int y1) {
-		GC gc = new GC(canvas);
+	public void draw(Drawable drawable, int x1, int y1) {
+		GC gc = new GC(drawable);
 		gc.setLineWidth(this.width);
 		gc.setLineDash(this.lineDash);
 		if (x1 != -1 && y1 != -1) {
-			if (this.points != null)
-				drawShape(gc, canvas.getBackground(), canvas.getBackground());
-			this.points = new ArrayList<PbPoint>(this.sidesNum);
+			boolean pointsIsEmpty = this.points.isEmpty();
+			/*if (!pointsIsEmpty)
+				drawShape(gc, canvas.getBackground(), canvas.getBackground());*/
 			double radius = Math.sqrt(Math.pow((x1 - this.x0), 2) + Math.pow((y1 - this.y0), 2));
 			double startAng = Math.acos((x1 - x0) / radius);
 			if (Math.asin((y0 - y1) / radius) > 0)
@@ -44,8 +44,10 @@ public class Shapes extends DrawingObject {
 			for (int i = 0; i < this.sidesNum; i++) {
 				int x = x0 + (int)(radius * (Math.cos(startAng + jumps * i)));
 				int y = y0 + (int)(radius * (Math.sin(startAng + jumps * i)));
-				PbPoint point = new PbPoint(x, y);
-				points.add(point);
+				if (pointsIsEmpty)
+					points.add(new PbPoint(x, y));
+				else
+					points.get(i).update(x, y);
 			}
 			this.x1 = x1;
 			this.y1 = y1;
@@ -77,6 +79,7 @@ public class Shapes extends DrawingObject {
 	public PointsManager getPointsManager() {
 		PointsManager pointsManager = 
 			new PointsManager(PointsManager.PointsListMode);
+		this.points = new ArrayList<PbPoint>();
 		pointsManager.linkPointsList(this.points);
 		return pointsManager;
 	}

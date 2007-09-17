@@ -4,6 +4,7 @@ import my.paintbrush.PointsManager.PointsManager;
 import my.paintbrush.Controls.PbMouseListener;
 import my.paintbrush.Properties.Properties;
 
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.widgets.Canvas;
 
 public abstract class DrawingObject {
@@ -13,7 +14,7 @@ public abstract class DrawingObject {
 	
 	public PointsManager pointsManager = getPointsManager();
 	
-	public abstract void draw(Canvas canvas, int x1, int y1);
+	public abstract void draw(Drawable drawable, int x1, int y1);
 	
 	public PbMouseListener getPbMouseListener() {
 		return null;

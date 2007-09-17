@@ -3,8 +3,8 @@ package my.paintbrush.Tools;
 import my.paintbrush.Properties.BasicProperties;
 
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Canvas;
 
 public class Arc extends DrawingObject {
 
@@ -19,13 +19,13 @@ public class Arc extends DrawingObject {
 		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
-	public void draw(Canvas canvas, int x1, int y1) {
+	public void draw(Drawable drawable, int x1, int y1) {
 		if (this.fColor != null) {
-			GC gc = new GC(canvas);
+			GC gc = new GC(drawable);
 			gc.setLineWidth(this.width);
 			gc.setLineDash(this.lineDash);
-			gc.setForeground(canvas.getBackground());
-			gc.drawArc(this.x0, this.y0, this.x1, this.y1, 30, 30);
+			/*gc.setForeground(canvas.getBackground());
+			gc.drawArc(this.x0, this.y0, this.x1, this.y1, 30, 30);*/
 			if (x1 != -1 && y1 != -1) {
 				this.x1 = x1;
 				this.y1 = y1;
