@@ -3,15 +3,15 @@ package my.paintbrush.Tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import my.paintbrush.Controls.PbMouseListener;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
-import my.paintbrush.Controls.PbMouseListener;
 import my.paintbrush.Properties.SimpleProperties;
 
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Canvas;
 
 public class FreePolygon extends DrawingObject {
 
@@ -30,9 +30,9 @@ public class FreePolygon extends DrawingObject {
 		this.bColor = (Color)prop.getProperty(SimpleProperties.BCOLOR);
 	}
 	
-	public void draw(Canvas canvas, int x1, int y1) {
+	public void draw(Drawable drawable, int x1, int y1) {
 		if (this.fColor != null) {
-			GC gc = new GC(canvas);
+			GC gc = new GC(drawable);
 			gc.setLineWidth(this.width);
 			gc.setLineDash(this.lineDash);
 			int[] intArr = getIntArray(points, points.size());
@@ -41,7 +41,7 @@ public class FreePolygon extends DrawingObject {
 				newIntArr[i] = intArr[i];
 			newIntArr[intArr.length] = this.x1;
 			newIntArr[intArr.length + 1] = this.y1;
-			drawPolygon(gc, newIntArr, canvas.getBackground(), canvas.getBackground());
+			//drawPolygon(gc, newIntArr, canvas.getBackground(), canvas.getBackground());
 			if (x1 != -1 && y1 != -1) {
 				this.x1 = x1;
 				this.y1 = y1;

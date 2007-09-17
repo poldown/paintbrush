@@ -4,8 +4,8 @@ import my.paintbrush.PointsManager.PointsManager;
 import my.paintbrush.Properties.BasicProperties;
 
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Canvas;
 
 public class Line extends DrawingObject {
 
@@ -22,9 +22,9 @@ public class Line extends DrawingObject {
 		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
-	public void draw(Canvas canvas, int x1, int y1) {
+	public void draw(Drawable drawable, int x1, int y1) {
 		if (this.fColor != null) {
-			GC gc = new GC(canvas);
+			GC gc = new GC(drawable);
 			gc.setLineWidth(this.width);
 			gc.setLineDash(this.lineDash);
 			/*if (image != null && path != null) {
@@ -40,8 +40,8 @@ public class Line extends DrawingObject {
 				gc.setClipping((Path)null);
 				gc.fillPath(path);
 			}*/
-			gc.setForeground(canvas.getBackground());
-			gc.drawLine(this.x0, this.y0, this.x1, this.y1);
+			/*gc.setForeground(canvas.getBackground());
+			gc.drawLine(this.x0, this.y0, this.x1, this.y1);*/
 			if (x1 != -1 && y1 != -1) {
 				this.x1 = x1;
 				this.y1 = y1;

@@ -7,8 +7,8 @@ import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.Properties.BasicProperties;
 
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Canvas;
 
 public class FreeDraw extends DrawingObject {
 
@@ -26,9 +26,9 @@ public class FreeDraw extends DrawingObject {
 		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
-	public void draw(Canvas canvas, int x1, int y1) {
+	public void draw(Drawable drawable, int x1, int y1) {
 		if (this.fColor != null) {
-			GC gc = new GC(canvas);
+			GC gc = new GC(drawable);
 			gc.setLineWidth(this.width);
 			gc.setForeground(this.fColor);
 			if (x1 != -1 && y1 != -1) {
@@ -36,8 +36,8 @@ public class FreeDraw extends DrawingObject {
 				int size = (points.size() >= 3?3:points.size());
 				gc.drawPolyline(getIntArray(points, size));
 			} else {
-				gc.setForeground(canvas.getBackground());
-				gc.drawPolyline(getIntArray(points, points.size()));
+				//gc.setForeground(canvas.getBackground());
+				//gc.drawPolyline(getIntArray(points, points.size()));
 				gc.setLineDash(this.lineDash);
 				gc.setForeground(this.fColor);
 				gc.drawPolyline(getIntArray(points, points.size()));

@@ -3,8 +3,8 @@ package my.paintbrush.Tools;
 import my.paintbrush.Properties.RoundRectangleProperties;
 
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Canvas;
 
 public class RoundRectangle extends DrawingObject {
 
@@ -23,11 +23,11 @@ public class RoundRectangle extends DrawingObject {
 		this.arcH = (Integer)prop.getProperty(RoundRectangleProperties.ARCH);
 	}
 	
-	public void draw(Canvas canvas, int x1, int y1) {
-		GC gc = new GC(canvas);
+	public void draw(Drawable drawable, int x1, int y1) {
+		GC gc = new GC(drawable);
 		gc.setLineWidth(this.width);
 		gc.setLineDash(this.lineDash);
-		drawRoundRectangle(gc, canvas.getBackground(), canvas.getBackground());
+		//drawRoundRectangle(gc, canvas.getBackground(), canvas.getBackground());
 		if (x1 != -1 && y1 != -1) {
 			this.x1 = x1;
 			this.y1 = y1;

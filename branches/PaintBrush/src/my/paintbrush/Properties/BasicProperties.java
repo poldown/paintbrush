@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 
-public class BasicProperties extends Properties {
+public class BasicProperties extends EmptyProperties {
 
 	public static final Property WIDTH = new Property(
 			"width", 3);
@@ -53,10 +53,10 @@ public class BasicProperties extends Properties {
 	public BasicProperties() {}
 	
 	public Property[] getProperties() {
-		return new Property[] {WIDTH, FCOLOR, LINEDASH}; 
+		return addProperties(super.getProperties(), WIDTH, FCOLOR, LINEDASH); 
 	}
 	
-	public class BasicPropertiesComp extends PropertiesComp {
+	public class BasicPropertiesComp extends EmptyPropertiesComp {
 		
 		private Canvas fColorSel;
 		private Button fColor_Transparent;
@@ -197,10 +197,11 @@ public class BasicProperties extends Properties {
 		
 		public Properties getCurProps() {
 			return new BasicProperties(
-					WIDTH.newWithValue(widthSel.getSelection()),
-					FCOLOR.newWithValue(fColor_Transparent.getSelection()?
-						null:fColorSel.getBackground()),
-					LINEDASH.newWithValue(dashes[lineDashSel.getSelectionIndex()]));
+					addProperties(super.getCurProps().properties, 
+						WIDTH.newWithValue(widthSel.getSelection()),
+						FCOLOR.newWithValue(fColor_Transparent.getSelection()?
+							null:fColorSel.getBackground()),
+						LINEDASH.newWithValue(dashes[lineDashSel.getSelectionIndex()])));
 		}
 	}
 }
