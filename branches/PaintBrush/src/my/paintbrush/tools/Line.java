@@ -1,5 +1,6 @@
 package my.paintbrush.tools;
 
+import my.paintbrush.PointsManager.PointsManager;
 import my.paintbrush.properties.BasicProperties;
 
 import org.eclipse.swt.graphics.Color;
@@ -63,6 +64,13 @@ public class Line extends DrawingObject {
 			gc.drawLine(this.x0, this.y0, this.x1, this.y1);
 			gc.dispose();
 		}
+	}
+	
+	public PointsManager getPointsManager() {
+		PointsManager pointsManager = 
+			new PointsManager(PointsManager.LineMode);
+		pointsManager.linkDrawingObject(this);
+		return pointsManager;
 	}
 	
 	public String getInstructions() {

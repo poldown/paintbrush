@@ -25,8 +25,7 @@ public class PBButton extends Canvas {
 		label.addMouseTrackListener(new MouseTrackListener() {
 		
 			public void mouseHover(MouseEvent e) {
-				// TODO Auto-generated method stub
-		
+				
 			}
 		
 			public void mouseExit(MouseEvent e) {

@@ -1,5 +1,6 @@
 package my.paintbrush.tools;
 
+import my.paintbrush.PointsManager.PointsManager;
 import my.paintbrush.controls.PbMouseListener;
 import my.paintbrush.properties.Properties;
 
@@ -7,13 +8,25 @@ import org.eclipse.swt.widgets.Canvas;
 
 public abstract class DrawingObject {
 	
-	int x0, y0;
-	int x1, y1;
+	public int x0, y0;
+	public int x1, y1;
+	
+	public PointsManager pointsManager = getPointsManager();
 	
 	public abstract void draw(Canvas canvas, int x1, int y1);
 	
 	public PbMouseListener getPbMouseListener() {
 		return null;
+	}
+	
+	/**
+	 * Default PointsManager
+	 */
+	public PointsManager getPointsManager() {
+		PointsManager pointsManager = 
+			new PointsManager(PointsManager.RectangleMode);
+		pointsManager.linkDrawingObject(this);
+		return pointsManager;
 	}
 	
 	// TODO: Add handling the getInstructions method of each DrawingObject

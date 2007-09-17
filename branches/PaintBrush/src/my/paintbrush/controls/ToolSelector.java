@@ -33,11 +33,16 @@ public class ToolSelector extends Composite {
 		this.parent = parent;
 		this.setLayout(new GridLayout(2, false));
 		
+		toolSel = addToolSel(style);
+		setTool(defaultTool);
+	}
+	
+	private Combo addToolSel(int style) {
 		Label toolSelLabel = new Label(this, SWT.NONE);
 		toolSelLabel.setText("Selected Tool:");
 		toolSelLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		
-		toolSel = new Combo(this, style);
+		final Combo toolSel = new Combo(this, style);
 		for (DrawingTool tool : DrawingTool.values())
 			toolSel.add(tool.disName);
 		
@@ -47,9 +52,7 @@ public class ToolSelector extends Composite {
 						[toolSel.getSelectionIndex()]);
 			}
 		});
-		
-		toolSel.setText(defaultTool.disName);
-		initiateTool(defaultTool);
+		return toolSel;
 	}
 	
 	public void initiateTool(DrawingTool tool) {
@@ -62,6 +65,11 @@ public class ToolSelector extends Composite {
 		this.pack();
 		this.parent.pack();
 		this.parent.layout();
+	}
+	
+	private void setTool(DrawingTool tool) {
+		toolSel.setText(tool.disName);
+		initiateTool(tool);
 	}
 	
 	public DrawingTool getSelectedTool() {

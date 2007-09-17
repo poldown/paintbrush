@@ -53,11 +53,7 @@ public class PbComposite extends Composite {
 		data.right = new FormAttachment(100);
 		data.top = new FormAttachment(0);
 		data.bottom = new FormAttachment(100);
-		button.setLayoutData(data);
-		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				updateCanvas();
-			}});*/
+		button.setLayoutData(data);*/
 		
 		titleCanvas = new Canvas(titleComp, SWT.NONE);
 		FormData data = new FormData();
@@ -68,10 +64,9 @@ public class PbComposite extends Composite {
 		data.top = new FormAttachment(0);
 		data.bottom = new FormAttachment(100);
 		titleCanvas.setLayoutData(data);
-		updateCanvas();
 		titleCanvas.addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent e) {
-				updateCanvas();
+				updateCanvas(e.gc);
 			}
 		});
 		
@@ -80,9 +75,8 @@ public class PbComposite extends Composite {
 		SWTContent.setDefaultMenu(titleCanvas);
 	}
 	
-	private void updateCanvas() {
+	private void updateCanvas(GC gc) {
 		final Display display = Display.getCurrent();
-		GC gc = new GC(titleCanvas);
 		gc.setBackgroundPattern(
 				new Pattern(display, 0, 0, 
 						titleCanvas.getSize().x,
@@ -94,12 +88,5 @@ public class PbComposite extends Composite {
 		gc.setForeground(display.getSystemColor(SWT.COLOR_WHITE));
 		gc.setFont(new Font(display, "Tahoma", 7, SWT.NONE));
 		gc.drawText(title, 5, 2);
-		gc.dispose();
-	}
-	
-	@Override
-	public void layout() {
-		super.layout();
-		updateCanvas();
 	}
 }
