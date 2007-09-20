@@ -7,6 +7,7 @@ import my.paintbrush.Properties.Property;
 
 public enum DrawingTool {
 	NONE("<none>", "", "my.paintbrush.Properties.Properties"),
+	POINTER("Pointer", "my.paintbrush.Tools.Pointer", "my.paintbrush.Properties.BasicProperties"),
 	LINE("Line", "my.paintbrush.Tools.Line", "my.paintbrush.Properties.BasicProperties"),
 	//ARC("Arc", "my.paintbrush.Tools.Arc", "my.paintbrush.Properties.BasicProperties"),
 	RECTANGLE("Rectangle", "my.paintbrush.Tools.Rectangle", "my.paintbrush.Properties.SimpleProperties"),

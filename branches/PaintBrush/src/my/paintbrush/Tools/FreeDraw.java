@@ -33,8 +33,13 @@ public class FreeDraw extends DrawingObject {
 			gc.setForeground(this.fColor);
 			if (x1 != -1 && y1 != -1) {
 				points.add(new PbPoint(x1, y1));
-				int size = (points.size() >= 3?3:points.size());
-				gc.drawPolyline(getIntArray(points, size));
+				//int size = (points.size() >= 3?3:points.size());
+				gc.drawPolyline(getIntArray(points, points.size()/*size*/));
+				//Set the 4 corners of the containing rectangle
+				if (x1 > this.x1) this.x1 = x1;
+				if (y1 > this.y1) this.y1 = y1;
+				if (x1 < this.x0) this.x0 = x1;
+				if (y1 < this.y0) this.y0 = y1;
 			} else {
 				//gc.setForeground(canvas.getBackground());
 				//gc.drawPolyline(getIntArray(points, points.size()));
