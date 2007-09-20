@@ -1,11 +1,11 @@
 package my.paintbrush.Tools;
 
-import my.paintbrush.PointsManager.PointsManager;
+import my.paintbrush.Controls.PbDo;
 import my.paintbrush.Controls.PbMouseListener;
+import my.paintbrush.PointsManager.PointsManager;
 import my.paintbrush.Properties.Properties;
 
 import org.eclipse.swt.graphics.Drawable;
-import org.eclipse.swt.widgets.Canvas;
 
 public abstract class DrawingObject {
 	
@@ -28,6 +28,13 @@ public abstract class DrawingObject {
 			new PointsManager(PointsManager.RectangleMode);
 		pointsManager.linkDrawingObject(this);
 		return pointsManager;
+	}
+	
+	/**
+	 * Things to do after the creation of the object
+	 */
+	public PbDo doAfter() {
+		return null;
 	}
 	
 	// TODO: Add handling the getInstructions method of each DrawingObject
