@@ -51,6 +51,8 @@ public class DrawingCanvas extends Canvas {
 	public java.util.List<DrawingObject> drawingObjectsMasks = new ArrayList<DrawingObject>();
 	public java.util.List<DrawingObject> drawingObjectsMasks2 = new ArrayList<DrawingObject>();
 	
+	public List<PbPoint> drawingPoints = new ArrayList<PbPoint>();
+	
 	private SWTContent swt;
 	
 	private Image backImage, lastPainted;
@@ -80,41 +82,41 @@ public class DrawingCanvas extends Canvas {
 				}
 			}
 			public void mouseDown(MouseEvent e) {
-					if (pbMouseListener != null && pbMouseListener.isListening()) {
-						pbMouseListener.mouseDown(e);
-						pbMouseListenerMasks.mouseDown(e);
-						pbMouseListenerMasks2.mouseDown(e);
-					} else {
-						if (backImage != null)
-							backImage.dispose();
-						backImage = getImage(canvas);
-						drawingTool = swt.toolSel.getSelectedTool();
-						if (drawingTool != DrawingTool.NONE) {
-							try {
-								Class<? extends DrawingObject> tool = Class.forName(drawingTool.className).asSubclass(DrawingObject.class);
-								@SuppressWarnings("unchecked")
-								Constructor<? extends DrawingObject> cons = tool.getConstructor(
-										Integer.TYPE,
-										Integer.TYPE,
-										Class.forName(drawingTool.propertiesClassName));
-								DrawingObject instance = cons.newInstance(e.x, e.y, 
-										swt.toolSel.propComp.getCurProps());
-								drawingObjects.add(instance);
-								Properties maskProp = changePropertiesColor(cons, new RGB(0xFF, 0xFF, 0xFF));
-								DrawingObject instanceMask = cons.newInstance(e.x, e.y, maskProp);
-								drawingObjectsMasks.add(instanceMask);
-								Properties maskProp2 = changePropertiesColor(cons, new RGB(0, 0, 0));
-								DrawingObject instanceMask2 = cons.newInstance(e.x, e.y, maskProp2);
-								drawingObjectsMasks2.add(instanceMask2);
-								pbMouseListener = instance.getPbMouseListener();
-								pbMouseListenerMasks = instanceMask.getPbMouseListener();
-								pbMouseListenerMasks2 = instanceMask2.getPbMouseListener();
-								pbDo = instance.doAfter();
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}
+				if (pbMouseListener != null && pbMouseListener.isListening()) {
+					pbMouseListener.mouseDown(e);
+					pbMouseListenerMasks.mouseDown(e);
+					pbMouseListenerMasks2.mouseDown(e);
+				} else {
+					if (backImage != null)
+						backImage.dispose();
+					backImage = getImage(canvas);
+					drawingTool = swt.toolSel.getSelectedTool();
+					if (drawingTool != DrawingTool.NONE) {
+						try {
+							Class<? extends DrawingObject> tool = Class.forName(drawingTool.className).asSubclass(DrawingObject.class);
+							@SuppressWarnings("unchecked")
+							Constructor<? extends DrawingObject> cons = tool.getConstructor(
+									Integer.TYPE,
+									Integer.TYPE,
+									Class.forName(drawingTool.propertiesClassName));
+							DrawingObject instance = cons.newInstance(e.x, e.y, 
+									swt.toolSel.propComp.getCurProps());
+							drawingObjects.add(instance);
+							Properties maskProp = changePropertiesColor(cons, new RGB(0xFF, 0xFF, 0xFF));
+							DrawingObject instanceMask = cons.newInstance(e.x, e.y, maskProp);
+							drawingObjectsMasks.add(instanceMask);
+							Properties maskProp2 = changePropertiesColor(cons, new RGB(0, 0, 0));
+							DrawingObject instanceMask2 = cons.newInstance(e.x, e.y, maskProp2);
+							drawingObjectsMasks2.add(instanceMask2);
+							pbMouseListener = instance.getPbMouseListener();
+							pbMouseListenerMasks = instanceMask.getPbMouseListener();
+							pbMouseListenerMasks2 = instanceMask2.getPbMouseListener();
+							pbDo = instance.doAfter();
+						} catch (Exception e1) {
+							e1.printStackTrace();
 						}
 					}
+				}
 			}
 			public void mouseDoubleClick(MouseEvent e) {
 				if (pbMouseListener != null && pbMouseListener.isListening()) {
@@ -231,6 +233,10 @@ public class DrawingCanvas extends Canvas {
 	public void paintAll() {
 		for (DrawingObject obj : drawingObjects)
 			obj.draw(this, -1, -1);
+		GC gc = new GC(this);
+		for (PbPoint point : drawingPoints)
+			drawPoint(gc, point, PDM_Regular);
+		gc.dispose();
 	}
 	
 	private void drawPoint(GC gc, PbPoint point, int mode) {
@@ -281,6 +287,7 @@ public class DrawingCanvas extends Canvas {
 			List<PbPoint> points = pointsManager.getPoints();
 			if (points != null)
 				for (PbPoint point : points) {
+					drawingPoints.remove(point);
 					drawPoint(gc, point, PDM_Background);
 					System.out.println("DeSelect Object of type: " + obj.getClass().getSimpleName() + ", ID: " + point.id);
 				}
@@ -297,6 +304,7 @@ public class DrawingCanvas extends Canvas {
 			List<PbPoint> points = pointsManager.getPoints();
 			if (points != null)
 				for (PbPoint point : points) {
+					drawingPoints.add(point);
 					drawPoint(gc, point, PDM_Regular);
 					System.out.println("Select Object of type: " + obj.getClass().getSimpleName() + ", ID: " + point.id);
 				}
