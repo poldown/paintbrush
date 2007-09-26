@@ -133,14 +133,7 @@ public class DrawingCanvas extends Canvas {
 					DrawingObject objMask = drawingObjectsMasks.get(index);
 					DrawingObject objMask2 = drawingObjectsMasks2.get(index);
 					//drawImage(backImage, canvas);
-					ImageData lastPaintedImageData = new ImageData(
-							canvas.getSize().x, canvas.getSize().y, 1, 
-							new PaletteData(new RGB[] {
-									new RGB(0, 0, 0), 
-									new RGB(0xFF, 0xFF, 0xFF)
-							})
-					);
-					if (lastPainted != null) {
+					if (lastPainted != null && !lastPainted.isDisposed()) {
 						objMask2.draw(lastPainted, e.x, e.y);
 						//drawImage(lastPainted, canvas);
 						Image image = new Image(Display.getCurrent(), backImage.getImageData(), lastPainted.getImageData());
@@ -148,6 +141,13 @@ public class DrawingCanvas extends Canvas {
 						image.dispose();
 						lastPainted.dispose();
 					}
+					ImageData lastPaintedImageData = new ImageData(
+							canvas.getSize().x, canvas.getSize().y, 1, 
+							new PaletteData(new RGB[] {
+									new RGB(0, 0, 0), 
+									new RGB(0xFF, 0xFF, 0xFF)
+							})
+					);
 					lastPainted = new Image(Display.getCurrent(), lastPaintedImageData);
 					objMask.draw(lastPainted, e.x, e.y);
 					obj.draw(canvas, e.x, e.y);
@@ -166,7 +166,11 @@ public class DrawingCanvas extends Canvas {
 		DrawingObject obj = drawingObjects.get(drawingObjects.size() - 1);
 		pbDo.run();
 		if (pbDo.generateSelection) {
-			org.eclipse.swt.graphics.Rectangle rect = new Rectangle(obj.x0, obj.y0, obj.x1 - obj.x0, obj.y1 - obj.y0);
+			org.eclipse.swt.graphics.Rectangle rect = new Rectangle(
+							Math.min(obj.x0, obj.x1), 
+							Math.min(obj.y0, obj.y1),
+							Math.abs(obj.x1 - obj.x0),
+							Math.abs(obj.y1 - obj.y0));
 			for (DrawingObject d_obj : drawingObjects) {
 				boolean select = true;
 				for (PbPoint point : d_obj.getPointsManager().getPoints())
@@ -177,6 +181,15 @@ public class DrawingCanvas extends Canvas {
 			}
 		}
 		if (pbDo.deleteObject) {
+			//drawImage(lastPainted, canvas);
+			//Visible -> false
+			if (lastPainted != null && !lastPainted.isDisposed()) {
+				Image image = new Image(Display.getCurrent(), backImage.getImageData(), lastPainted.getImageData());
+				drawImage(image, this);
+				image.dispose();
+				lastPainted.dispose();
+			}
+			//Delete actual object
 			drawingObjectsMasks.remove(drawingObjects.indexOf(obj));
 			drawingObjectsMasks2.remove(drawingObjects.indexOf(obj));
 			drawingObjects.remove(obj);

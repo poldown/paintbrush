@@ -4,11 +4,9 @@ import my.paintbrush.Controls.PbDo;
 import my.paintbrush.Properties.BasicProperties;
 import my.paintbrush.Properties.SimpleProperties;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Display;
 
 public class Pointer extends DrawingObject {
 
