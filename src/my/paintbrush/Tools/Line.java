@@ -27,6 +27,7 @@ public class Line extends DrawingObject {
 			GC gc = new GC(drawable);
 			gc.setLineWidth(this.width);
 			gc.setLineDash(this.lineDash);
+			//gc.setAlpha(128);
 			/*if (image != null && path != null) {
 				//Path path = new Path(Display.getCurrent());
 				//path.moveTo(x0, y0);
