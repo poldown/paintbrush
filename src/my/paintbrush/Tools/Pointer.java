@@ -2,7 +2,6 @@ package my.paintbrush.Tools;
 
 import my.paintbrush.Controls.PbDo;
 import my.paintbrush.Properties.BasicProperties;
-import my.paintbrush.Properties.SimpleProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
@@ -14,7 +13,7 @@ public class Pointer extends DrawingObject {
 	
 	public Pointer(int x0, int y0, BasicProperties prop) {
 		super(x0, y0, prop);
-		this.fColor = (Color)prop.getProperty(SimpleProperties.FCOLOR);
+		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
 	@Override

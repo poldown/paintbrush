@@ -18,13 +18,16 @@ public class Shapes extends DrawingObject {
 	int width;
 	int[] lineDash;
 	Color bColor, fColor;
+	int fColor_Trans, bColor_Trans;
 	
 	public Shapes(int x0, int y0, ShapesProperties prop) {
 		super(x0, y0, prop);
 		this.width = (Integer)prop.getProperty(ShapesProperties.WIDTH);
 		this.lineDash = (int[])prop.getProperty(ShapesProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(ShapesProperties.FCOLOR);
+		this.fColor_Trans = (Integer)prop.getProperty(ShapesProperties.FCOLOR_TRANS);
 		this.bColor = (Color)prop.getProperty(ShapesProperties.BCOLOR);
+		this.bColor_Trans = (Integer)prop.getProperty(ShapesProperties.BCOLOR_TRANS);
 		this.sidesNum = (Integer)prop.getProperty(ShapesProperties.SIDESNUM);
 	}
 	
@@ -57,11 +60,11 @@ public class Shapes extends DrawingObject {
 	}
 
 	private void drawShape(GC gc, Color fColor, Color bColor) {
-		if (this.bColor != null) {
+		if (this.bColor_Trans > 0) {
 			gc.setBackground(bColor);
 			gc.fillPolygon(getIntArray(points, points.size()));
 		}
-		if (this.fColor != null) {
+		if (this.fColor_Trans > 0) {
 			gc.setForeground(fColor);
 			gc.drawPolygon(getIntArray(points, points.size()));
 		}

@@ -11,15 +11,15 @@ public class Line extends DrawingObject {
 
 	int width;
 	int[] lineDash;
-	Color fColor, bColor;
-	/*Image image;
-	Path path;*/
+	Color fColor;
+	int fColor_Trans;
 	
 	public Line(int x0, int y0, BasicProperties prop) {
 		super(x0, y0, prop);
 		this.width = (Integer)prop.getProperty(BasicProperties.WIDTH);
 		this.lineDash = (int[])prop.getProperty(BasicProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
+		this.fColor_Trans = (Integer)prop.getProperty(BasicProperties.FCOLOR_TRANS);
 	}
 	
 	public void draw(Drawable drawable, int x1, int y1) {
@@ -27,6 +27,9 @@ public class Line extends DrawingObject {
 			GC gc = new GC(drawable);
 			gc.setLineWidth(this.width);
 			gc.setLineDash(this.lineDash);
+<<<<<<< .mine
+			//gc.setAlpha(this.fColor_Trans);
+=======
 			//gc.setAlpha(128);
 			/*if (image != null && path != null) {
 				//Path path = new Path(Display.getCurrent());
@@ -43,23 +46,10 @@ public class Line extends DrawingObject {
 			}*/
 			/*gc.setForeground(canvas.getBackground());
 			gc.drawLine(this.x0, this.y0, this.x1, this.y1);*/
+>>>>>>> .r27
 			if (x1 != -1 && y1 != -1) {
 				this.x1 = x1;
 				this.y1 = y1;
-				/*//A failing try to draw the background benieth
-				//the line.
-				if (path != null)
-					path.dispose();
-				path = new Path(Display.getCurrent());
-				path.addRectangle(Math.min(x0, x1) - 5, Math.min(y0, y1), Math.abs(x1 - x0) + 10, Math.abs(y1 - y0) + 10);
-				//gc.setClipping(path);
-				//image = new Image(Display.getCurrent(), Math.abs(x1 - x0) + 10, Math.abs(y1 - y0) + 10);
-				if (image != null)
-					image.dispose();
-				image = new Image(Display.getCurrent(), canvas.getSize().x, canvas.getSize().y);
-				//gc.copyArea(image, Math.min(x0, x1) - this.width, Math.min(y0, y1) - this.width);
-				gc.copyArea(image, 0, 0);
-				//gc.setClipping((Path)null);*/
 			}
 			gc.setForeground(this.fColor);
 			gc.drawLine(this.x0, this.y0, this.x1, this.y1);
