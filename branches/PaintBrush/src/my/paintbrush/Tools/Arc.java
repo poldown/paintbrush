@@ -10,7 +10,7 @@ public class Arc extends DrawingObject {
 
 	int width;
 	int[] lineDash;
-	Color fColor, bColor;
+	Color fColor;
 	
 	public Arc(int x0, int y0, BasicProperties prop) {
 		super(x0, y0, prop);

@@ -16,13 +16,13 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 
@@ -32,6 +32,8 @@ public class BasicProperties extends EmptyProperties {
 			"width", 3);
 	public static final Property FCOLOR = new Property(
 			"fColor", Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+	public static final Property FCOLOR_TRANS = new Property(
+			"fColor_Trans", 255);
 	public static final Property LINEDASH = new Property(
 			"lineDash", null);
 	
@@ -53,15 +55,15 @@ public class BasicProperties extends EmptyProperties {
 	public BasicProperties() {}
 	
 	public Property[] getProperties() {
-		return addProperties(super.getProperties(), WIDTH, FCOLOR, LINEDASH); 
+		return addProperties(super.getProperties(), WIDTH, FCOLOR, FCOLOR_TRANS, LINEDASH); 
 	}
 	
 	public class BasicPropertiesComp extends EmptyPropertiesComp {
 		
-		private Canvas fColorSel;
-		private Button fColor_Transparent;
-		private Spinner widthSel;
-		private ImageCombo lineDashSel;
+		protected Canvas fColorSel;
+		protected Scale fColor_Transparent;
+		protected Spinner widthSel;
+		protected ImageCombo lineDashSel;
 		
 		public BasicPropertiesComp(final Composite comp, int style) {
 			super(comp, style);
@@ -71,7 +73,7 @@ public class BasicProperties extends EmptyProperties {
 			widthSel = addWidthSel();
 			lineDashSel = addLineDashSel();
 			fColorSel = addColorSel("Foreground Color:", (Color)FCOLOR.value);
-			fColor_Transparent = addColorTransSel(fColorSel);
+			fColor_Transparent = addColorTransSel(fColorSel, (Integer)FCOLOR_TRANS.value);
 		}
 		
 		private Spinner addWidthSel() {
@@ -114,19 +116,22 @@ public class BasicProperties extends EmptyProperties {
 			return colorSel;
 		}
 		
-		protected Button addColorTransSel(final Canvas colorSel) {
-			//TODO: BUG! Transparancy isn't related to any property
+		protected Scale addColorTransSel(final Canvas colorSel, int initialTrans) {
+			//TODO: BUG! Transparency isn't related to any property
 			//		causing a new created tool to lose its previous
 			//		state.
-			final Button color_Transparency = new Button(this, SWT.CHECK);
-			color_Transparency.setText("Transparent");
-			color_Transparency.setSelection(false);
+			final Scale color_Transparency = new Scale(this, SWT.CHECK);
+			//color_Transparency.setText("Transparent");
+			color_Transparency.setMinimum(0);
+			color_Transparency.setMaximum(255);
+			color_Transparency.setSelection(initialTrans);
 			color_Transparency.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
-					colorSel.setEnabled(!color_Transparency.getSelection());
-					enableColorSel(colorSel, !color_Transparency.getSelection());
+					colorSel.setEnabled(color_Transparency.getSelection() != 0);
+					enableColorSel(colorSel, color_Transparency.getSelection() != 0);
 				}
 			});
+			color_Transparency.notifyListeners(SWT.Selection, new Event());
 			return color_Transparency;
 		}
 		
@@ -199,8 +204,8 @@ public class BasicProperties extends EmptyProperties {
 			return new BasicProperties(
 					addProperties(super.getCurProps().properties, 
 						WIDTH.newWithValue(widthSel.getSelection()),
-						FCOLOR.newWithValue(fColor_Transparent.getSelection()?
-							null:fColorSel.getBackground()),
+						FCOLOR.newWithValue(fColorSel.getBackground()),
+						FCOLOR_TRANS.newWithValue(fColor_Transparent.getSelection()),
 						LINEDASH.newWithValue(dashes[lineDashSel.getSelectionIndex()])));
 		}
 	}

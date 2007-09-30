@@ -79,6 +79,7 @@ public class DrawingCanvas extends Canvas {
 					else
 						selectObject(drawingObjects.get(drawingObjects.size() - 1));
 					drawingTool = DrawingTool.NONE;
+					updateBackImage();
 				}
 			}
 			public void mouseDown(MouseEvent e) {
@@ -87,9 +88,7 @@ public class DrawingCanvas extends Canvas {
 					pbMouseListenerMasks.mouseDown(e);
 					pbMouseListenerMasks2.mouseDown(e);
 				} else {
-					if (backImage != null)
-						backImage.dispose();
-					backImage = getImage(canvas);
+					updateBackImage();
 					drawingTool = swt.toolSel.getSelectedTool();
 					if (drawingTool != DrawingTool.NONE) {
 						try {
@@ -159,11 +158,18 @@ public class DrawingCanvas extends Canvas {
 		
 		canvas.addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent e) {
-				paintAll();
+				if (backImage != null && !backImage.isDisposed())
+					drawImage(backImage, canvas);
 			}
 		});
 	}
 	
+	private void updateBackImage() {
+		if (backImage != null)
+			backImage.dispose();
+		backImage = getImage(this);
+	}
+
 	private void handlePbDo(PbDo pbDo) {
 		DrawingObject obj = drawingObjects.get(drawingObjects.size() - 1);
 		pbDo.run();

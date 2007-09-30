@@ -109,7 +109,7 @@ public class ToolSelector extends Composite {
 				if (propPbComp != null)
 					propPbComp.dispose();
 				//Create a new properties composite
-				propPbComp = new PbComposite(comp, SWT.NONE, "Properties");
+				propPbComp = new PbComposite(comp, SWT.NONE, "Properties - " + getSelectedTool().disName);
 				propComp = propCompCons.newInstance(propInstance, propPbComp, style); 
 				GridData gridData = new GridData(SWT.CENTER, SWT.TOP, false, true);
 				propPbComp.setLayoutData(gridData);

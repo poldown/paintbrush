@@ -18,6 +18,7 @@ public class FreePolygon extends DrawingObject {
 	int width;
 	int[] lineDash;
 	Color fColor, bColor;
+	int fColor_Trans, bColor_Trans;
 	List<PbPoint> points;
 	
 	public FreePolygon(int x0, int y0, SimpleProperties prop) {
@@ -27,7 +28,9 @@ public class FreePolygon extends DrawingObject {
 		this.width = (Integer)prop.getProperty(SimpleProperties.WIDTH);
 		this.lineDash = (int[])prop.getProperty(SimpleProperties.LINEDASH);
 		this.fColor = (Color)prop.getProperty(SimpleProperties.FCOLOR);
+		this.fColor_Trans = (Integer)prop.getProperty(SimpleProperties.FCOLOR_TRANS);
 		this.bColor = (Color)prop.getProperty(SimpleProperties.BCOLOR);
+		this.bColor_Trans = (Integer)prop.getProperty(SimpleProperties.BCOLOR_TRANS);
 	}
 	
 	public void draw(Drawable drawable, int x1, int y1) {
@@ -54,11 +57,11 @@ public class FreePolygon extends DrawingObject {
 	}
 	
 	private void drawPolygon(GC gc, int[] intArr, Color fColor, Color bColor) {
-		if (this.bColor != null) {
+		if (this.bColor_Trans > 0) {
 			gc.setBackground(bColor);
 			gc.fillPolygon(intArr);
 		}
-		if (this.fColor != null) {
+		if (this.fColor_Trans > 0) {
 			gc.setForeground(fColor);
 			gc.drawPolygon(intArr);
 		}
