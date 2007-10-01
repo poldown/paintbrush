@@ -5,6 +5,7 @@ import java.util.List;
 
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
+import my.paintbrush.Properties.Properties;
 import my.paintbrush.Properties.ShapesProperties;
 
 import org.eclipse.swt.graphics.Color;
@@ -85,6 +86,10 @@ public class Shapes extends DrawingObject {
 		this.points = new ArrayList<PbPoint>();
 		pointsManager.linkPointsList(this.points);
 		return pointsManager;
+	}
+	
+	public void drawSample(Drawable drawable, Properties prop) {
+		// Do nothing (TODO)
 	}
 	
 	public String getInstructions() {

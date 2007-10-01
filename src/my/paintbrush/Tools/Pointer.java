@@ -2,6 +2,7 @@ package my.paintbrush.Tools;
 
 import my.paintbrush.Controls.PbDo;
 import my.paintbrush.Properties.BasicProperties;
+import my.paintbrush.Properties.Properties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
@@ -45,6 +46,10 @@ public class Pointer extends DrawingObject {
 		};
 	}
 
+	public void drawSample(Drawable drawable, Properties prop) {
+		// Do nothing (TODO)
+	}
+	
 	@Override
 	public String getInstructions() {
 		return "Selects Objects";

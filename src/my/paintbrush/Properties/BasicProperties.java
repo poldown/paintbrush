@@ -1,5 +1,6 @@
 package my.paintbrush.Properties;
 
+import my.paintbrush.Pb;
 import my.paintbrush.Controls.ImageCombo;
 
 import org.eclipse.swt.SWT;
@@ -10,6 +11,7 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -65,6 +67,16 @@ public class BasicProperties extends EmptyProperties {
 		protected Spinner widthSel;
 		protected ImageCombo lineDashSel;
 		
+		final protected SelectionListener notifyPropChangeSelectionListener = new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				notifyPropChange();
+			}
+		};
+		
+		protected void notifyPropChange() {
+			this.notifyListeners(Pb.PropChangeEvent, new Event());
+		}
+		
 		public BasicPropertiesComp(final Composite comp, int style) {
 			super(comp, style);
 			
@@ -86,6 +98,7 @@ public class BasicProperties extends EmptyProperties {
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
 			widthSel.setLayoutData(gridData);
+			widthSel.addSelectionListener(notifyPropChangeSelectionListener);
 			return widthSel;
 		}
 		
@@ -101,6 +114,7 @@ public class BasicProperties extends EmptyProperties {
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
 			lineDashSel.setLayoutData(gridData);
+			lineDashSel.addSelectionListener(notifyPropChangeSelectionListener);
 			return lineDashSel;
 		}
 		
@@ -127,6 +141,7 @@ public class BasicProperties extends EmptyProperties {
 			color_Transparency.setSelection(initialTrans);
 			color_Transparency.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
+					notifyPropChange();
 					colorSel.setEnabled(color_Transparency.getSelection() != 0);
 					enableColorSel(colorSel, color_Transparency.getSelection() != 0);
 				}
@@ -168,8 +183,10 @@ public class BasicProperties extends EmptyProperties {
 					ColorDialog dialog = new ColorDialog(shell);
 					dialog.setRGB(((Canvas)e.getSource()).getBackground().getRGB());
 					RGB selRGB = dialog.open();
-					if (selRGB != null)
+					if (selRGB != null) {
 						((Canvas)e.getSource()).setBackground(new Color(Display.getCurrent(), selRGB));
+						notifyPropChange();
+					}
 				}
 			};
 		}

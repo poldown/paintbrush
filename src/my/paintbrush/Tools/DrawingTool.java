@@ -39,4 +39,19 @@ public enum DrawingTool {
 			return null;
 		}
 	}
+	
+	public Constructor<? extends DrawingObject> getCorrespondingDOCons() throws Exception {
+		Class<? extends DrawingObject> toolClass = Class.forName(this.className).asSubclass(DrawingObject.class);
+		Constructor<? extends DrawingObject> cons = toolClass.getConstructor(
+				Integer.TYPE,
+				Integer.TYPE,
+				Class.forName(this.propertiesClassName));
+		return cons;
+	}
+	
+	public Constructor<? extends DrawingObject> getCorrespondingDODefCons() throws Exception {
+		Class<? extends DrawingObject> toolClass = Class.forName(this.className).asSubclass(DrawingObject.class);
+		Constructor<? extends DrawingObject> cons = toolClass.getConstructor();
+		return cons;
+	}
 }

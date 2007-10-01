@@ -19,6 +19,10 @@ public class Arc extends DrawingObject {
 		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
+	public Arc(Drawable drawable, BasicProperties prop) {
+		super(drawable, prop);
+	}
+	
 	public void draw(Drawable drawable, int x1, int y1) {
 		if (this.fColor != null) {
 			GC gc = new GC(drawable);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.Properties.BasicProperties;
+import my.paintbrush.Properties.Properties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
@@ -60,6 +61,10 @@ public class FreeDraw extends DrawingObject {
 		return intArr;
 	}
 
+	public void drawSample(Drawable drawable, Properties prop) {
+		// Do nothing (TODO)
+	}
+	
 	public String getInstructions() {
 		return "Free drawing";
 	}

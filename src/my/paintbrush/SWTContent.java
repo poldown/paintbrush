@@ -2,7 +2,9 @@ package my.paintbrush;
 
 import my.paintbrush.Controls.DrawingCanvas;
 import my.paintbrush.Controls.PbComposite;
+import my.paintbrush.Controls.SampleView;
 import my.paintbrush.Controls.ToolSelector;
+import my.paintbrush.Properties.Properties.PropertiesComp;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -16,6 +18,9 @@ public class SWTContent {
 
 	public DrawingCanvas canvas;
 	public ToolSelector toolSel;
+	public SampleView sampleView;
+	
+	public PropertiesComp propComp;
 	
 	protected void createDrawingCanvas(Shell shell, int style) {
 		PbComposite pbComposite = new PbComposite(shell, SWT.NONE, "Drawing Canvas");
@@ -33,10 +38,18 @@ public class SWTContent {
 		pbComposite.setLayoutData(gridData);
 	}
 	
+	protected void createSampleView(Shell shell, int style) {
+		PbComposite pbComposite = new PbComposite(shell, SWT.NONE, "Sample View");
+		sampleView = new SampleView(pbComposite, style, shell, this);
+		GridData gridData = new GridData(SWT.CENTER, SWT.TOP, true, true);
+		pbComposite.setLayoutData(gridData);
+	}
+	
 	protected SWTContent(final Shell shell) {
 		shell.setLayout(new GridLayout(2, false));
 		createDrawingCanvas(shell, SWT.BORDER);
 		createToolSelector(shell, SWT.NONE);
+		createSampleView(shell, SWT.BORDER);
 	}
 	
 	public static void setDefaultMenu(Control control) {

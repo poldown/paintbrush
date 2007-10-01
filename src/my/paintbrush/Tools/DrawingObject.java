@@ -47,4 +47,8 @@ public abstract class DrawingObject {
 				"following arguments: int x0, int y0, Properties prop " +
 				"must be provided.");*/
 	}
+	
+	public DrawingObject(Drawable drawable, Properties prop) {
+		System.out.println("Drawing Sample...");
+	}
 }
