@@ -13,6 +13,7 @@ import my.paintbrush.Properties.Property;
 import my.paintbrush.Properties.SimpleProperties;
 import my.paintbrush.Tools.DrawingObject;
 import my.paintbrush.Tools.DrawingTool;
+import my.paintbrush.Tools.MaskedDrawingObject;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -35,8 +36,8 @@ public class DrawingCanvas extends Canvas {
 	
 	public DrawingTool drawingTool = DrawingTool.NONE;
 	private PbMouseListener pbMouseListener = null;
-	private PbMouseListener pbMouseListenerMasks = null;
-	private PbMouseListener pbMouseListenerMasks2 = null;
+	private PbMouseListener pbMouseListenerMask1 = null;
+	private PbMouseListener pbMouseListenerMask2 = null;
 	
 	private PbDo pbDo = null;
 	
@@ -46,10 +47,9 @@ public class DrawingCanvas extends Canvas {
 	private final int PDM_Regular = 0;
 	private final int PDM_Background = 1;
 	private final int PDM_Moving = 2;
+	private final int PDM_Hidden = 3;
 	
-	public java.util.List<DrawingObject> drawingObjects = new ArrayList<DrawingObject>();
-	public java.util.List<DrawingObject> drawingObjectsMasks = new ArrayList<DrawingObject>();
-	public java.util.List<DrawingObject> drawingObjectsMasks2 = new ArrayList<DrawingObject>();
+	public java.util.List<MaskedDrawingObject> drawingObjects = new ArrayList<MaskedDrawingObject>();
 	
 	public List<PbPoint> drawingPoints = new ArrayList<PbPoint>();
 	
@@ -70,46 +70,39 @@ public class DrawingCanvas extends Canvas {
 			public void mouseUp(MouseEvent e) {
 				if (pbMouseListener != null && pbMouseListener.isListening()) {
 					pbMouseListener.mouseUp(e);
-					pbMouseListenerMasks.mouseUp(e);
-					pbMouseListenerMasks2.mouseUp(e);
+					pbMouseListenerMask1.mouseUp(e);
+					pbMouseListenerMask2.mouseUp(e);
 				} else {
 					deselectAllObjects();
 					if (pbDo != null)
 						handlePbDo(pbDo);
-					else
-						selectObject(drawingObjects.get(drawingObjects.size() - 1));
+					else {
+						updateBackImage();
+						selectObject(drawingObjects.get(drawingObjects.size() - 1).base);
+					}
 					drawingTool = DrawingTool.NONE;
-					updateBackImage();
 				}
 			}
 			public void mouseDown(MouseEvent e) {
 				if (pbMouseListener != null && pbMouseListener.isListening()) {
 					pbMouseListener.mouseDown(e);
-					pbMouseListenerMasks.mouseDown(e);
-					pbMouseListenerMasks2.mouseDown(e);
+					pbMouseListenerMask1.mouseDown(e);
+					pbMouseListenerMask2.mouseDown(e);
 				} else {
 					updateBackImage();
 					drawingTool = swt.toolSel.getSelectedTool();
 					if (drawingTool != DrawingTool.NONE) {
 						try {
-							Class<? extends DrawingObject> tool = Class.forName(drawingTool.className).asSubclass(DrawingObject.class);
-							@SuppressWarnings("unchecked")
-							Constructor<? extends DrawingObject> cons = tool.getConstructor(
-									Integer.TYPE,
-									Integer.TYPE,
-									Class.forName(drawingTool.propertiesClassName));
-							DrawingObject instance = cons.newInstance(e.x, e.y, 
-									swt.toolSel.propComp.getCurProps());
-							drawingObjects.add(instance);
-							Properties maskProp = changePropertiesColor(cons, new RGB(0xFF, 0xFF, 0xFF));
-							DrawingObject instanceMask = cons.newInstance(e.x, e.y, maskProp);
-							drawingObjectsMasks.add(instanceMask);
+							Constructor<? extends DrawingObject> cons = drawingTool.getCorrespondingDOCons();
+							DrawingObject instance = cons.newInstance(e.x, e.y, swt.propComp.getCurProps());
+							Properties maskProp1 = changePropertiesColor(cons, new RGB(0xFF, 0xFF, 0xFF));
+							DrawingObject instanceMask1 = cons.newInstance(e.x, e.y, maskProp1);
 							Properties maskProp2 = changePropertiesColor(cons, new RGB(0, 0, 0));
 							DrawingObject instanceMask2 = cons.newInstance(e.x, e.y, maskProp2);
-							drawingObjectsMasks2.add(instanceMask2);
+							drawingObjects.add(new MaskedDrawingObject(instance, instanceMask1, instanceMask2));
 							pbMouseListener = instance.getPbMouseListener();
-							pbMouseListenerMasks = instanceMask.getPbMouseListener();
-							pbMouseListenerMasks2 = instanceMask2.getPbMouseListener();
+							pbMouseListenerMask1 = instanceMask1.getPbMouseListener();
+							pbMouseListenerMask2 = instanceMask2.getPbMouseListener();
 							pbDo = instance.doAfter();
 						} catch (Exception e1) {
 							e1.printStackTrace();
@@ -120,8 +113,8 @@ public class DrawingCanvas extends Canvas {
 			public void mouseDoubleClick(MouseEvent e) {
 				if (pbMouseListener != null && pbMouseListener.isListening()) {
 					pbMouseListener.mouseDoubleClick(e);
-					pbMouseListenerMasks.mouseDoubleClick(e);
-					pbMouseListenerMasks2.mouseDoubleClick(e);
+					pbMouseListenerMask1.mouseDoubleClick(e);
+					pbMouseListenerMask2.mouseDoubleClick(e);
 				}
 			}
 		});
@@ -130,9 +123,9 @@ public class DrawingCanvas extends Canvas {
 			public void mouseMove(MouseEvent e) {
 				if (drawingTool != DrawingTool.NONE && drawingObjects.size() > 0) {
 					int index = drawingObjects.size() - 1;
-					DrawingObject obj = drawingObjects.get(index);
-					DrawingObject objMask = drawingObjectsMasks.get(index);
-					DrawingObject objMask2 = drawingObjectsMasks2.get(index);
+					DrawingObject obj = drawingObjects.get(index).base;
+					DrawingObject objMask1 = drawingObjects.get(index).mask1;
+					DrawingObject objMask2 = drawingObjects.get(index).mask2;
 					//drawImage(backImage, canvas);
 					if (lastPainted != null && !lastPainted.isDisposed()) {
 						objMask2.draw(lastPainted, e.x, e.y);
@@ -150,7 +143,7 @@ public class DrawingCanvas extends Canvas {
 							})
 					);
 					lastPainted = new Image(Display.getCurrent(), lastPaintedImageData);
-					objMask.draw(lastPainted, e.x, e.y);
+					objMask1.draw(lastPainted, e.x, e.y);
 					obj.draw(canvas, e.x, e.y);
 				}
 			}
@@ -158,8 +151,9 @@ public class DrawingCanvas extends Canvas {
 		
 		canvas.addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent e) {
-				if (backImage != null && !backImage.isDisposed())
-					drawImage(backImage, canvas);
+				/*if (backImage != null && !backImage.isDisposed())
+					drawImage(backImage, canvas);*/
+				paintAll(new Rectangle(e.x, e.y, e.width, e.height));
 			}
 		});
 	}
@@ -171,23 +165,8 @@ public class DrawingCanvas extends Canvas {
 	}
 
 	private void handlePbDo(PbDo pbDo) {
-		DrawingObject obj = drawingObjects.get(drawingObjects.size() - 1);
+		MaskedDrawingObject obj = drawingObjects.get(drawingObjects.size() - 1);
 		pbDo.run();
-		if (pbDo.generateSelection) {
-			org.eclipse.swt.graphics.Rectangle rect = new Rectangle(
-							Math.min(obj.x0, obj.x1), 
-							Math.min(obj.y0, obj.y1),
-							Math.abs(obj.x1 - obj.x0),
-							Math.abs(obj.y1 - obj.y0));
-			for (DrawingObject d_obj : drawingObjects) {
-				boolean select = true;
-				for (PbPoint point : d_obj.getPointsManager().getPoints())
-					if (!rect.contains(point.x, point.y))
-						select = false;
-				if (select)
-					selectObject(d_obj);
-			}
-		}
 		if (pbDo.deleteObject) {
 			//drawImage(lastPainted, canvas);
 			//Visible -> false
@@ -198,17 +177,64 @@ public class DrawingCanvas extends Canvas {
 				lastPainted.dispose();
 			}
 			//Delete actual object
-			drawingObjectsMasks.remove(drawingObjects.indexOf(obj));
-			drawingObjectsMasks2.remove(drawingObjects.indexOf(obj));
 			drawingObjects.remove(obj);
 		}
+		if (pbDo.generateSelection) {
+			org.eclipse.swt.graphics.Rectangle rect = new Rectangle(
+							Math.min(obj.base.x0, obj.base.x1), 
+							Math.min(obj.base.y0, obj.base.y1),
+							Math.abs(obj.base.x1 - obj.base.x0),
+							Math.abs(obj.base.y1 - obj.base.y0));
+			if (rect.height == 0 && rect.width == 0) {
+				MaskedDrawingObject objToSelect = null;
+				ImageData maskImageData = new ImageData(
+						this.getSize().x, this.getSize().y, 1, 
+						new PaletteData(new RGB[] {
+								new RGB(0, 0, 0), 
+								new RGB(0xFF, 0xFF, 0xFF)
+						})
+				);
+				for (int i = drawingObjects.size() - 1; i >= 0; i--) {
+					MaskedDrawingObject d_obj = drawingObjects.get(i);
+					Image mask = new Image(Display.getCurrent(), maskImageData);
+					d_obj.mask1.draw(mask, -1, -1);
+					ImageData imageData = mask.getImageData();
+					mask.dispose();
+					if (imageData.getPixel(rect.x, rect.y) != 0)
+						if (!d_obj.equals(obj)) {
+							objToSelect = d_obj;
+							break;
+						}
+				}
+				if (objToSelect != null) {
+					moveObjectToFront(objToSelect);
+					selectObject(objToSelect.base);
+				}
+			} else {
+				for (MaskedDrawingObject d_obj : drawingObjects) {
+					boolean select = true;
+					for (PbPoint point : d_obj.base.getPointsManager().getPoints())
+						if (!rect.contains(point.x, point.y))
+							select = false;
+					if (select)
+						selectObject(d_obj.base);
+				}
+			}
+		}
+		
+	}
+
+	private void moveObjectToFront(MaskedDrawingObject dObj) {
+		drawingObjects.add(dObj);
+		drawingObjects.remove(dObj);
+		paintAll();
 	}
 
 	@SuppressWarnings("unchecked")
 	private Properties changePropertiesColor(Constructor cons, RGB color) throws Exception {
 		Class<? extends Properties> consProperties = cons.getParameterTypes()[2].asSubclass(Properties.class);
 		Properties retProp = consProperties.newInstance();
-		Property[] curProperties = swt.toolSel.propComp.getCurProps().getProperties();
+		Property[] curProperties = swt.propComp.getCurProps().getProperties();
 		Property[] editedProps = new Property[curProperties.length];
 		for (int i = 0; i < curProperties.length; i++) {
 			Property prop = curProperties[i];
@@ -237,19 +263,35 @@ public class DrawingCanvas extends Canvas {
 	}
 	
 	public void paintAll() {
-		for (DrawingObject obj : drawingObjects)
-			obj.draw(this, -1, -1);
-		GC gc = new GC(this);
+		paintAll(this.getClientArea());
+	}
+	
+	public void paintAll(Rectangle rect) {
+		Image workImage = new Image(Display.getCurrent(), this.getSize().x, this.getSize().y);
+		for (MaskedDrawingObject obj : drawingObjects)
+			obj.base.draw(workImage, -1, -1);
+		GC gc = new GC(workImage);
 		for (PbPoint point : drawingPoints)
-			drawPoint(gc, point, PDM_Regular);
+			drawPoint(gc, point, (isHidden(point)?PDM_Hidden:PDM_Regular));
 		gc.dispose();
+		gc = new GC(this);
+		gc.drawImage(workImage, rect.x, rect.y, rect.width, rect.height, 
+								rect.x, rect.y, rect.width, rect.height);
+		gc.dispose();
+		workImage.dispose();
+		System.out.println("Paint: " + rect);
 	}
 	
 	private void drawPoint(GC gc, PbPoint point, int mode) {
-		final int point_size = 2;
+		final int point_size = 3;
 		if (point.id == null)
 			point.assignID(idGenerator.generate());
 		Display display = Display.getCurrent();
+		gc.setForeground(display.getSystemColor(SWT.COLOR_WHITE));
+		if (mode == PDM_Hidden)
+			gc.setLineDash(new int[] {1});
+		gc.drawOval(point.x - point_size, point.y - point_size, 
+					point_size * 2, point_size * 2);
 		switch (mode) {
 		case PDM_Regular:
 			gc.setForeground(display.getSystemColor(SWT.COLOR_BLUE));
@@ -265,23 +307,27 @@ public class DrawingCanvas extends Canvas {
 			break;
 		default:
 		}
-		gc.fillOval(point.x - point_size, point.y - point_size, 
-					point_size * 2, point_size * 2);
-		gc.drawOval(point.x - point_size, point.y - point_size, 
-					point_size * 2, point_size * 2);
+		if (mode != PDM_Hidden) {
+		gc.fillOval(point.x - point_size + 1, point.y - point_size + 1, 
+					(point_size - 1) * 2, (point_size - 1) * 2);
+		gc.drawOval(point.x - point_size + 1, point.y - point_size + 1, 
+				(point_size - 1) * 2, (point_size - 1) * 2);
+		}
+		gc.setLineDash(null);
 	}
 	
 	List<DrawingObject> selectedObjects = new ArrayList<DrawingObject>();
 	
 	public void selectAllObjects() {
-		for (DrawingObject obj : drawingObjects)
-			selectObject(obj);
+		for (MaskedDrawingObject obj : drawingObjects)
+			selectObject(obj.base);
 	}
 	
 	public void deselectAllObjects() {
 		for (DrawingObject obj : selectedObjects)
 			deselectObject(obj, false);
 		selectedObjects.clear();
+		paintAll();
 	}
 	
 	public void deselectObject(DrawingObject obj, boolean remove) {
@@ -291,14 +337,17 @@ public class DrawingCanvas extends Canvas {
 			GC gc = new GC(this);
 			PointsManager pointsManager = obj.pointsManager;
 			List<PbPoint> points = pointsManager.getPoints();
-			if (points != null)
+			if (points != null) {
+				System.out.print("DeSelect Object of type: " + obj.getClass().getSimpleName());
 				for (PbPoint point : points) {
 					drawingPoints.remove(point);
 					drawPoint(gc, point, PDM_Background);
-					System.out.println("DeSelect Object of type: " + obj.getClass().getSimpleName() + ", ID: " + point.id);
+					System.out.print(", ID: " + point.id);
 				}
+				System.out.println();
+			}
 			gc.dispose();
-			obj.draw(this, -1, -1);
+			//obj.draw(this, -1, -1);
 		}
 	}
 	
@@ -308,13 +357,42 @@ public class DrawingCanvas extends Canvas {
 			GC gc = new GC(this);
 			PointsManager pointsManager = obj.pointsManager;
 			List<PbPoint> points = pointsManager.getPoints();
-			if (points != null)
+			if (points != null) {
+				System.out.print("Select Object of type: " + obj.getClass().getSimpleName());
 				for (PbPoint point : points) {
-					drawingPoints.add(point);
-					drawPoint(gc, point, PDM_Regular);
-					System.out.println("Select Object of type: " + obj.getClass().getSimpleName() + ", ID: " + point.id);
+					drawingPoints.add(point.setDO(obj));
+					drawPoint(gc, point, (isHidden(point)?PDM_Hidden:PDM_Regular));
+					System.out.print(", ID: " + point.id);
 				}
+				System.out.println();
+			}
 			gc.dispose();
 		}
+	}
+
+	private boolean isHidden(PbPoint point) {
+		boolean hidden = false;
+		for (int i = drawingObjects.size() - 1; (i >= 0) && !drawingObjects.get(i).base.equals(point.drawingObject); i--) {
+			MaskedDrawingObject d_obj = drawingObjects.get(i);
+			Image mask = new Image(Display.getCurrent(), getMaskImageData());
+			d_obj.mask1.draw(mask, -1, -1);
+			ImageData imageData = mask.getImageData();
+			mask.dispose();
+			if (imageData.getPixel(point.x, point.y) != 0) {
+				hidden = true;
+				break;
+			}
+		}
+		return (hidden);
+	}
+
+	private ImageData getMaskImageData() {
+		return new ImageData(
+				this.getSize().x, this.getSize().y, 1, 
+				new PaletteData(new RGB[] {
+						new RGB(0, 0, 0), 
+						new RGB(0xFF, 0xFF, 0xFF)
+				})
+		);
 	}
 }

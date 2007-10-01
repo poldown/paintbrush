@@ -40,6 +40,7 @@ public class ShapesProperties extends SimpleProperties {
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
 			sidesNumSel.setLayoutData(gridData);
+			sidesNumSel.addSelectionListener(notifyPropChangeSelectionListener);
 			return sidesNumSel;
 		}
 		

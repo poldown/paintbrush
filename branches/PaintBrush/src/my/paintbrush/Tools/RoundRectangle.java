@@ -1,5 +1,6 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.Properties.Properties;
 import my.paintbrush.Properties.RoundRectangleProperties;
 
 import org.eclipse.swt.graphics.Color;
@@ -48,6 +49,10 @@ public class RoundRectangle extends DrawingObject {
 			gc.setForeground(fColor);
 			gc.drawRoundRectangle(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0, this.arcW, this.arcH);
 		}
+	}
+	
+	public void drawSample(Drawable drawable, Properties prop) {
+		// Do nothing (TODO)
 	}
 	
 	public String getInstructions() {

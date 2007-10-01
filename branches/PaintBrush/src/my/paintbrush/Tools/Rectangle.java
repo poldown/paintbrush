@@ -1,5 +1,6 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.Properties.Properties;
 import my.paintbrush.Properties.SimpleProperties;
 
 import org.eclipse.swt.graphics.Color;
@@ -45,6 +46,10 @@ public class Rectangle extends DrawingObject {
 			gc.setForeground(fColor);
 			gc.drawRectangle(this.x0, this.y0, this.x1 - this.x0, this.y1 - this.y0);
 		}
+	}
+	
+	public void drawSample(Drawable drawable, Properties prop) {
+		// Do nothing (TODO)
 	}
 	
 	public String getInstructions() {

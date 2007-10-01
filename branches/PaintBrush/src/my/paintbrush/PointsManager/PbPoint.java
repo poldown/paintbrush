@@ -1,6 +1,7 @@
 package my.paintbrush.PointsManager;
 
 import my.paintbrush.PointsManager.IDGenerator.ID;
+import my.paintbrush.Tools.DrawingObject;
 
 import org.eclipse.swt.graphics.Point;
 
@@ -17,6 +18,8 @@ public final class PbPoint {
 	
 	public ID id;
 	
+	public DrawingObject drawingObject;
+	
 	/**
 	 * Constructs a new point with the given x and y coordinates.
 	 *
@@ -31,6 +34,11 @@ public final class PbPoint {
 	public void update (int x, int y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public PbPoint setDO(DrawingObject dObj) {
+		this.drawingObject = dObj;
+		return this;
 	}
 	
 	/**

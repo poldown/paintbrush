@@ -44,6 +44,7 @@ public class RoundRectangleProperties extends SimpleProperties {
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
 			arcWidthSel.setLayoutData(gridData);
+			arcWidthSel.addSelectionListener(notifyPropChangeSelectionListener);
 			return arcWidthSel;
 		}
 		
@@ -57,6 +58,7 @@ public class RoundRectangleProperties extends SimpleProperties {
 			GridData gridData = new GridData();
 			gridData.horizontalSpan = 2;
 			arcHeightSel.setLayoutData(gridData);
+			arcHeightSel.addSelectionListener(notifyPropChangeSelectionListener);
 			return arcHeightSel;
 		}
 		
