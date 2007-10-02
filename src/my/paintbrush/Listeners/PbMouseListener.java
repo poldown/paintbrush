@@ -1,8 +1,9 @@
-package my.paintbrush.Controls;
+package my.paintbrush.Listeners;
 
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 
-public abstract class PbMouseListener {
+public abstract class PbMouseListener implements MouseListener {
 
 	private boolean listening = true;
 	

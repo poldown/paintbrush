@@ -1,9 +1,9 @@
 package my.paintbrush;
 
-import my.paintbrush.Controls.DrawingCanvas;
-import my.paintbrush.Controls.PbComposite;
-import my.paintbrush.Controls.SampleView;
-import my.paintbrush.Controls.ToolSelector;
+import my.paintbrush.PbControls.PbComposite;
+import my.paintbrush.PbControls.PbDrawingCanvas;
+import my.paintbrush.PbControls.PbSampleView;
+import my.paintbrush.PbControls.PbToolSelector;
 import my.paintbrush.Properties.Properties.PropertiesComp;
 
 import org.eclipse.swt.SWT;
@@ -16,15 +16,15 @@ import org.eclipse.swt.widgets.Shell;
 
 public class SWTContent {
 
-	public DrawingCanvas canvas;
-	public ToolSelector toolSel;
-	public SampleView sampleView;
+	public PbDrawingCanvas canvas;
+	public PbToolSelector toolSel;
+	public PbSampleView sampleView;
 	
 	public PropertiesComp propComp;
 	
 	protected void createDrawingCanvas(Shell shell, int style) {
 		PbComposite pbComposite = new PbComposite(shell, SWT.NONE, "Drawing Canvas");
-		canvas = new DrawingCanvas(pbComposite, style, this);
+		canvas = new PbDrawingCanvas(pbComposite, style, this);
 		canvas.setLayoutData(new GridData(600, 600));
 		GridData gridData = new GridData();
 		gridData.verticalSpan = 4;
@@ -33,14 +33,14 @@ public class SWTContent {
 	
 	protected void createToolSelector(Shell shell, int style) {
 		PbComposite pbComposite = new PbComposite(shell, SWT.NONE, "Tool Selector");
-		toolSel = new ToolSelector(pbComposite, style, shell);
+		toolSel = new PbToolSelector(pbComposite, style, shell);
 		GridData gridData = new GridData(SWT.CENTER, SWT.TOP, true, true);
 		pbComposite.setLayoutData(gridData);
 	}
 	
 	protected void createSampleView(Shell shell, int style) {
 		PbComposite pbComposite = new PbComposite(shell, SWT.NONE, "Sample View");
-		sampleView = new SampleView(pbComposite, style, shell, this);
+		sampleView = new PbSampleView(pbComposite, style, shell, this);
 		GridData gridData = new GridData(SWT.CENTER, SWT.TOP, true, true);
 		pbComposite.setLayoutData(gridData);
 	}

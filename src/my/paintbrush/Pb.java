@@ -2,7 +2,7 @@ package my.paintbrush;
 
 import java.lang.reflect.Constructor;
 
-import my.paintbrush.Controls.PbComposite;
+import my.paintbrush.PbControls.PbComposite;
 import my.paintbrush.Properties.Properties;
 import my.paintbrush.Properties.Property;
 import my.paintbrush.Properties.Properties.PropertiesComp;
@@ -10,7 +10,11 @@ import my.paintbrush.Tools.DrawingTool;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 
 public class Pb {
 	

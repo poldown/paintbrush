@@ -1,4 +1,4 @@
-package my.paintbrush.Controls;
+package my.paintbrush.PbControls;
 
 import java.util.Arrays;
 import java.util.List;

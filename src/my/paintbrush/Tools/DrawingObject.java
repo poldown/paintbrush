@@ -1,7 +1,7 @@
 package my.paintbrush.Tools;
 
-import my.paintbrush.Controls.PbDo;
-import my.paintbrush.Controls.PbMouseListener;
+import my.paintbrush.Listeners.PbMouseListener;
+import my.paintbrush.PbControls.PbDo;
 import my.paintbrush.PointsManager.PointsManager;
 import my.paintbrush.Properties.Properties;
 

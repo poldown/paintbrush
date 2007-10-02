@@ -1,4 +1,4 @@
-package my.paintbrush.Controls;
+package my.paintbrush.PbControls;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -12,11 +12,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-public class PBButton extends Canvas {
+public class PbButton extends Canvas {
 
 	Label label;
 	
-	public PBButton (Composite parent, int style) {
+	public PbButton (Composite parent, int style) {
 		super (parent, style);
 		
 		label = new Label(this, SWT.NONE);

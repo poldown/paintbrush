@@ -1,10 +1,13 @@
-package my.paintbrush.Controls;
+package my.paintbrush.PbControls;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
 import my.paintbrush.SWTContent;
+import my.paintbrush.Listeners.DrawListener;
+import my.paintbrush.Listeners.PbMouseListener;
+import my.paintbrush.PbControls.PbDo;
 import my.paintbrush.PointsManager.IDGenerator;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
@@ -17,10 +20,7 @@ import my.paintbrush.Tools.MaskedDrawingObject;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -31,8 +31,10 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 
-public class DrawingCanvas extends Canvas {
+public class PbDrawingCanvas extends Canvas {
 	
 	public DrawingTool drawingTool = DrawingTool.NONE;
 	private PbMouseListener pbMouseListener = null;
@@ -57,33 +59,36 @@ public class DrawingCanvas extends Canvas {
 	
 	private Image backImage, lastPainted;
 	
-	public DrawingCanvas (Composite parent, int style, SWTContent swt) {
+	public PbDrawingCanvas (Composite parent, int style, SWTContent swt) {
 		super (parent, style);
 		this.swt = swt;
 		this.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		this.setBackgroundMode(SWT.INHERIT_DEFAULT);
-		addDrawListener(this);
+		this.addDrawListener(getDrawListener());
 	}
 	
-	public void addDrawListener(final Canvas canvas) {
-		canvas.addMouseListener(new MouseListener() {
+	private DrawListener getDrawListener() {
+		return new DrawListener() {
 			public void mouseUp(MouseEvent e) {
 				if (pbMouseListener != null && pbMouseListener.isListening()) {
 					pbMouseListener.mouseUp(e);
 					pbMouseListenerMask1.mouseUp(e);
 					pbMouseListenerMask2.mouseUp(e);
-				} else {
-					deselectAllObjects();
-					if (pbDo != null)
-						handlePbDo(pbDo);
-					else {
-						updateBackImage();
-						selectObject(drawingObjects.get(drawingObjects.size() - 1).base);
+				} else
+					if (drawingTool != DrawingTool.NONE) {
+						deselectAllObjects();
+						if (pbDo != null)
+							handlePbDo(pbDo);
+						else {
+							updateBackImage();
+							selectObject(drawingObjects.get(drawingObjects.size() - 1).base);
+						}
+						drawingTool = DrawingTool.NONE;
 					}
-					drawingTool = DrawingTool.NONE;
-				}
 			}
+		
 			public void mouseDown(MouseEvent e) {
+				((PbDrawingCanvas)e.getSource()).forceFocus();
 				if (pbMouseListener != null && pbMouseListener.isListening()) {
 					pbMouseListener.mouseDown(e);
 					pbMouseListenerMask1.mouseDown(e);
@@ -110,6 +115,7 @@ public class DrawingCanvas extends Canvas {
 					}
 				}
 			}
+		
 			public void mouseDoubleClick(MouseEvent e) {
 				if (pbMouseListener != null && pbMouseListener.isListening()) {
 					pbMouseListener.mouseDoubleClick(e);
@@ -117,10 +123,9 @@ public class DrawingCanvas extends Canvas {
 					pbMouseListenerMask2.mouseDoubleClick(e);
 				}
 			}
-		});
-		
-		canvas.addMouseMoveListener(new MouseMoveListener() {
+			
 			public void mouseMove(MouseEvent e) {
+				PbDrawingCanvas canvas = (PbDrawingCanvas)e.getSource();
 				if (drawingTool != DrawingTool.NONE && drawingObjects.size() > 0) {
 					int index = drawingObjects.size() - 1;
 					DrawingObject obj = drawingObjects.get(index).base;
@@ -147,15 +152,36 @@ public class DrawingCanvas extends Canvas {
 					obj.draw(canvas, e.x, e.y);
 				}
 			}
-		});
 		
-		canvas.addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent e) {
-				/*if (backImage != null && !backImage.isDisposed())
-					drawImage(backImage, canvas);*/
+				if (backImage != null && !backImage.isDisposed())
+					drawImage(backImage, (PbDrawingCanvas)e.getSource());
 				paintAll(new Rectangle(e.x, e.y, e.width, e.height));
 			}
-		});
+		};
+	}
+
+	public void addDrawListener(final DrawListener listener) {
+		addListener (SWT.MouseDown, new Listener() {
+			public void handleEvent(Event event) {
+				listener.mouseDown(new MouseEvent(event));
+			}});
+		addListener (SWT.MouseUp, new Listener() {
+			public void handleEvent(Event event) {
+				listener.mouseUp(new MouseEvent(event));
+			}});
+		addListener (SWT.MouseDoubleClick, new Listener() {
+			public void handleEvent(Event event) {
+				listener.mouseDoubleClick(new MouseEvent(event));
+			}});
+		addListener (SWT.MouseMove, new Listener() {
+			public void handleEvent(Event event) {
+				listener.mouseMove(new MouseEvent(event));
+			}});
+		addListener (SWT.Paint, new Listener() {
+			public void handleEvent(Event event) {
+				listener.paintControl(new PaintEvent(event));
+			}});
 	}
 	
 	private void updateBackImage() {
