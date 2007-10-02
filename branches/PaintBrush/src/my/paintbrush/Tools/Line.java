@@ -1,8 +1,8 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.PointsManager;
 import my.paintbrush.Properties.BasicProperties;
-import my.paintbrush.Properties.Properties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
@@ -47,9 +47,17 @@ public class Line extends DrawingObject {
 		return pointsManager;
 	}
 	
-	public void drawSample(Drawable drawable, Properties prop) {
-		// Do nothing (TODO)
-		System.out.println("Drawing Sample...");
+	public void drawSample(PbDrawable drawable) {
+		x0 = width * 2;
+		y0 = width * 2;
+		x1 = drawable.width - width * 2;
+		y1 = drawable.height - width * 2;
+		draw(drawable, -1, -1);
+		x0 = (drawable.width / 3) * 2;
+		y0 = width * 2;
+		x1 = drawable.width / 3;
+		y1 = drawable.height - width * 2;
+		draw(drawable, -1, -1);
 	}
 	
 	public String getInstructions() {

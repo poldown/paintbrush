@@ -1,12 +1,13 @@
 package my.paintbrush.Tools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import my.paintbrush.Listeners.PbMouseListener;
+import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
-import my.paintbrush.Properties.Properties;
 import my.paintbrush.Properties.SimpleProperties;
 
 import org.eclipse.swt.events.MouseEvent;
@@ -40,19 +41,19 @@ public class FreePolygon extends DrawingObject {
 			gc.setLineWidth(this.width);
 			gc.setLineDash(this.lineDash);
 			int[] intArr = getIntArray(points, points.size());
-			int[] newIntArr = new int[intArr.length + 2];
-			for (int i = 0; i < intArr.length; i++)
-				newIntArr[i] = intArr[i];
-			newIntArr[intArr.length] = this.x1;
-			newIntArr[intArr.length + 1] = this.y1;
-			//drawPolygon(gc, newIntArr, canvas.getBackground(), canvas.getBackground());
 			if (x1 != -1 && y1 != -1) {
+				int[] newIntArr = new int[intArr.length + 2];
+				for (int i = 0; i < intArr.length; i++)
+					newIntArr[i] = intArr[i];
+				newIntArr[intArr.length] = this.x1;
+				newIntArr[intArr.length + 1] = this.y1;
 				this.x1 = x1;
 				this.y1 = y1;
 				newIntArr[intArr.length] = x1;
 				newIntArr[intArr.length + 1] = y1;
-			}
-			drawPolygon(gc, newIntArr, this.fColor, this.bColor);
+				drawPolygon(gc, newIntArr, this.fColor, this.bColor);
+			} else
+				drawPolygon(gc, intArr, this.fColor, this.bColor);
 			gc.dispose();
 		}
 	}
@@ -97,8 +98,16 @@ public class FreePolygon extends DrawingObject {
 		};
 	}
 	
-	public void drawSample(Drawable drawable, Properties prop) {
-		// Do nothing (TODO)
+	public void drawSample(PbDrawable drawable) {
+		int maxx = drawable.width;
+		int maxy = drawable.height;
+		points = Arrays.asList(new PbPoint[] {
+			new PbPoint(maxx / 8, maxy / 2),
+			new PbPoint(maxx / 4, maxy  - maxy / 6),
+			new PbPoint(maxx / 2 + maxx / 8, maxy / 8),
+			new PbPoint(maxx - maxx / 8, maxy / 2)
+		});
+		draw(drawable, -1, -1);
 	}
 	
 	public String getInstructions() {

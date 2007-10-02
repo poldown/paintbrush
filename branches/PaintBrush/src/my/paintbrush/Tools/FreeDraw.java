@@ -1,11 +1,12 @@
 package my.paintbrush.Tools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.Properties.BasicProperties;
-import my.paintbrush.Properties.Properties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
@@ -61,8 +62,18 @@ public class FreeDraw extends DrawingObject {
 		return intArr;
 	}
 
-	public void drawSample(Drawable drawable, Properties prop) {
-		// Do nothing (TODO)
+	public void drawSample(PbDrawable drawable) {
+		int maxx = drawable.width;
+		int maxy = drawable.height;
+		points = Arrays.asList(new PbPoint[] {
+			new PbPoint(maxx / 8, maxy / 8),
+			new PbPoint(maxx / 4, maxy  - maxy / 6),
+			new PbPoint(maxx / 3, maxy / 4),
+			new PbPoint(maxx / 2, maxy - maxy / 4),
+			new PbPoint(maxx - maxx / 4, maxy / 2),
+			new PbPoint(maxx - maxx / 8, maxy - maxy / 8)
+		});
+		draw(drawable, -1, -1);
 	}
 	
 	public String getInstructions() {

@@ -1,8 +1,8 @@
 package my.paintbrush.Tools;
 
 import my.paintbrush.PbControls.PbDo;
-import my.paintbrush.Properties.BasicProperties;
-import my.paintbrush.Properties.Properties;
+import my.paintbrush.PbControls.PbDrawable;
+import my.paintbrush.Properties.PointerProperties;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
@@ -12,13 +12,18 @@ public class Pointer extends DrawingObject {
 
 	Color fColor;
 	
-	public Pointer(int x0, int y0, BasicProperties prop) {
+	public Pointer(int x0, int y0, PointerProperties prop) {
 		super(x0, y0, prop);
-		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
+		this.fColor = (Color)prop.getProperty(PointerProperties.SELECTION_FCOLOR);
 	}
 	
+	private void chooseOperationMode() {
+		System.out.println("choosing...");
+	}
+
 	@Override
 	public void draw(Drawable drawable, int x1, int y1) {
+		chooseOperationMode();
 		GC gc = new GC(drawable);
 		gc.setLineWidth(2);
 		gc.setLineDash(new int[] {5, 2});
@@ -46,7 +51,7 @@ public class Pointer extends DrawingObject {
 		};
 	}
 
-	public void drawSample(Drawable drawable, Properties prop) {
+	public void drawSample(PbDrawable drawable) {
 		// Do nothing (TODO)
 	}
 	

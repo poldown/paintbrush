@@ -1,5 +1,6 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.Properties.BasicProperties;
 
 import org.eclipse.swt.graphics.Color;
@@ -19,10 +20,6 @@ public class Arc extends DrawingObject {
 		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
-	public Arc(Drawable drawable, BasicProperties prop) {
-		super(drawable, prop);
-	}
-	
 	public void draw(Drawable drawable, int x1, int y1) {
 		if (this.fColor != null) {
 			GC gc = new GC(drawable);
@@ -38,6 +35,14 @@ public class Arc extends DrawingObject {
 			gc.drawArc(this.x0, this.y0, this.x1, this.y1, 30, 30);
 			gc.dispose();
 		}
+	}
+
+	public void drawSample(PbDrawable drawable) {
+		x0 = width / 2;
+		y0 = width / 2;
+		x1 = drawable.width - width / 2;
+		y1 = drawable.height - width / 2;
+		draw(drawable, -1, -1);
 	}
 	
 	public String getInstructions() {

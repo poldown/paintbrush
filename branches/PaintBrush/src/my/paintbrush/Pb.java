@@ -2,6 +2,10 @@ package my.paintbrush;
 
 import java.lang.reflect.Constructor;
 
+import my.paintbrush.Events.PbControlEvent;
+import my.paintbrush.Listeners.PbControlsAdapter;
+import my.paintbrush.Listeners.PbControlsListener;
+import my.paintbrush.Listeners.PbTypedListener;
 import my.paintbrush.PbControls.PbComposite;
 import my.paintbrush.Properties.Properties;
 import my.paintbrush.Properties.Property;
@@ -12,21 +16,30 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 public class Pb {
 	
-	public static int ToolSelectedEvent = 1000;
-	public static int PropChangeEvent = 1001;
-	
-	@SuppressWarnings("unused")
 	private SWTContent swt;
 	private Shell shell;
 	
 	private PbComposite propPbComp;
 	private Properties propInstance;
+	
+	protected PbTypedListener controlsListener = new PbTypedListener(
+			new PbControlsListener() {
+				public void toolSelected(PbControlEvent e) {
+					System.out.println("Tool Selected! Initiating...");
+					initiateTool((DrawingTool) e.tool);
+					notifyPropChange(e);
+				}
+				public void propertiesChanged(PbControlEvent e) {
+					System.out.println("Properties Changed (" + e.item + ")");
+					// The drawingTool which is being used must be supplied
+					// as the e.tool!
+					swt.sampleView.updateSampleView(e.tool);
+				}
+			});
 	
 	public void initiateTool(DrawingTool tool) {
 		if (tool != DrawingTool.NONE)
@@ -34,9 +47,6 @@ public class Pb {
 		else
 			if (propPbComp != null)
 				propPbComp.dispose();
-		/*this.pack();
-		this.parent.pack();
-		this.parent.layout();*/
 		shell.pack();
 		shell.layout();
 	}
@@ -72,7 +82,7 @@ public class Pb {
 				//Create a new properties composite
 				propPbComp = new PbComposite(comp, SWT.NONE, "Properties - " + tool.disName);
 				swt.propComp = propCompCons.newInstance(propInstance, propPbComp, style);
-				swt.propComp.addListener(Pb.PropChangeEvent, handlePropChangeEvent(tool));
+				swt.propComp.addListener(PbSWT.PropertiesChanged, handlePropChangeEvent(tool));
 				GridData gridData = new GridData(SWT.CENTER, SWT.TOP, false, true);
 				propPbComp.setLayoutData(gridData);
 				swt.propComp.pack();
@@ -83,36 +93,27 @@ public class Pb {
 		}
 	}
 
-	private Listener handlePropChangeEvent(final DrawingTool drawingTool) {
-		return new Listener() {
-			public void handleEvent(Event event) {
-				event.data = drawingTool;
-				notifyPropChange(event);
+	private PbTypedListener handlePropChangeEvent(final DrawingTool drawingTool) {
+		return new PbTypedListener(new PbControlsAdapter() {
+			public void propertiesChanged(PbControlEvent e) {
+				e.tool = drawingTool;
+				notifyPropChange(e);
 			}
-		};
+		});
 	}
 	
-	private void notifyPropChange(Event event) {
+	private void notifyPropChange(PbControlEvent event) {
 		System.out.println("Delegating properties change event handling...");
-		event.item = event.widget;
-		shell.notifyListeners(PropChangeEvent, event);
-	}
-	
-	private Listener handleToolSelectionEvent() {
-		return new Listener() {
-			public void handleEvent(Event event) {
-				System.out.println("Tool Selected! Initiating...");
-				initiateTool((DrawingTool) event.data);
-				notifyPropChange(event);
-			}
-		};
+		//event.item = event.widget;
+		shell.notifyListeners(PbSWT.PropertiesChanged, event);
 	}
 	
 	public Pb() {
 		Display display = new Display();
 		shell = new Shell(display);
-		shell.addListener(ToolSelectedEvent, handleToolSelectionEvent());
 		swt = new SWTContent(shell);
+		shell.addListener(PbSWT.ToolSelected, controlsListener);
+		shell.addListener(PbSWT.PropertiesChanged, controlsListener);
 		shell.pack();
 		shell.open();
 		

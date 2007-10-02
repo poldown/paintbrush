@@ -1,6 +1,7 @@
 package my.paintbrush.PbControls;
 
-import my.paintbrush.Pb;
+import my.paintbrush.PbSWT;
+import my.paintbrush.Events.PbControlEvent;
 import my.paintbrush.Tools.DrawingTool;
 
 import org.eclipse.swt.SWT;
@@ -10,7 +11,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 
 public class PbToolSelector extends Composite {
@@ -55,9 +55,9 @@ public class PbToolSelector extends Composite {
 	}
 	
 	private void selectTool(DrawingTool tool) {
-		Event event = new Event();
-		event.data = tool;
-		parent.notifyListeners(Pb.ToolSelectedEvent, event);
+		PbControlEvent event = new PbControlEvent();
+		event.tool = tool;
+		parent.notifyListeners(PbSWT.ToolSelected, event);
 	}
 
 	public DrawingTool getSelectedTool() {

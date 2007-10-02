@@ -1,6 +1,5 @@
 package my.paintbrush.Properties;
 
-import my.paintbrush.Pb;
 import my.paintbrush.Controls.ImageCombo;
 
 import org.eclipse.swt.SWT;
@@ -11,7 +10,6 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -33,7 +31,7 @@ public class BasicProperties extends EmptyProperties {
 	public static final Property WIDTH = new Property(
 			"width", 3);
 	public static final Property FCOLOR = new Property(
-			"fColor", Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			"fCOLOR", Display.getCurrent().getSystemColor(SWT.COLOR_RED));
 	public static final Property FCOLOR_TRANS = new Property(
 			"fColor_Trans", 255);
 	public static final Property LINEDASH = new Property(
@@ -66,16 +64,6 @@ public class BasicProperties extends EmptyProperties {
 		protected Scale fColor_Transparent;
 		protected Spinner widthSel;
 		protected ImageCombo lineDashSel;
-		
-		final protected SelectionListener notifyPropChangeSelectionListener = new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				notifyPropChange();
-			}
-		};
-		
-		protected void notifyPropChange() {
-			this.notifyListeners(Pb.PropChangeEvent, new Event());
-		}
 		
 		public BasicPropertiesComp(final Composite comp, int style) {
 			super(comp, style);
