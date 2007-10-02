@@ -1,4 +1,4 @@
-package my.paintbrush.Controls;
+package my.paintbrush.PbControls;
 
 public abstract class PbDo {
 

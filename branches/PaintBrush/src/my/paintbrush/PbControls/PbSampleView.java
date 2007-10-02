@@ -1,6 +1,4 @@
-package my.paintbrush.Controls;
-
-import java.lang.reflect.InvocationTargetException;
+package my.paintbrush.PbControls;
 
 import my.paintbrush.Pb;
 import my.paintbrush.SWTContent;
@@ -13,11 +11,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-public class SampleView extends Canvas {
+public class PbSampleView extends Canvas {
 	
 	private SWTContent swt;
 
-	public SampleView(Composite comp, int style, Composite parent, SWTContent swt) {
+	public PbSampleView(Composite comp, int style, Composite parent, SWTContent swt) {
 		super(comp, style);
 		
 		this.swt = swt;

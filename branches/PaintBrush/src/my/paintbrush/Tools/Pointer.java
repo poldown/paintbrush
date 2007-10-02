@@ -1,6 +1,6 @@
 package my.paintbrush.Tools;
 
-import my.paintbrush.Controls.PbDo;
+import my.paintbrush.PbControls.PbDo;
 import my.paintbrush.Properties.BasicProperties;
 import my.paintbrush.Properties.Properties;
 

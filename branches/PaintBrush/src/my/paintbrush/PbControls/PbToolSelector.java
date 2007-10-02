@@ -1,4 +1,4 @@
-package my.paintbrush.Controls;
+package my.paintbrush.PbControls;
 
 import my.paintbrush.Pb;
 import my.paintbrush.Tools.DrawingTool;
@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 
-public class ToolSelector extends Composite {
+public class PbToolSelector extends Composite {
 
 	final DrawingTool defaultTool = DrawingTool.NONE;
 	
@@ -21,7 +21,7 @@ public class ToolSelector extends Composite {
 	
 	private Combo toolSel;
 	
-	public ToolSelector(Composite comp, int style, Composite parent) {
+	public PbToolSelector(Composite comp, int style, Composite parent) {
 		super(comp, style);
 		
 		this.parent = parent;
