@@ -3,9 +3,9 @@ package my.paintbrush.Tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
-import my.paintbrush.Properties.Properties;
 import my.paintbrush.Properties.ShapesProperties;
 
 import org.eclipse.swt.graphics.Color;
@@ -88,8 +88,12 @@ public class Shapes extends DrawingObject {
 		return pointsManager;
 	}
 	
-	public void drawSample(Drawable drawable, Properties prop) {
-		// Do nothing (TODO)
+	public void drawSample(PbDrawable drawable) {
+		x0 = drawable.width / 2;
+		y0 = drawable.height / 2;
+		x1 = 5 * (drawable.width / 6);
+		y1 = 5 * (drawable.height / 6);
+		draw(drawable, x1, y1);
 	}
 	
 	public String getInstructions() {

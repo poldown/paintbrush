@@ -1,51 +1,69 @@
 package my.paintbrush.PbControls;
 
-import my.paintbrush.Pb;
+import my.paintbrush.PbSWT;
 import my.paintbrush.SWTContent;
+import my.paintbrush.Controls.DrawingCanvas;
+import my.paintbrush.Listeners.DrawListener;
+import my.paintbrush.Tools.DrawingObject;
 import my.paintbrush.Tools.DrawingTool;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 
-public class PbSampleView extends Canvas {
+public class PbSampleView extends DrawingCanvas {
 	
 	private SWTContent swt;
+	private DrawingTool drawingTool;
 
 	public PbSampleView(Composite comp, int style, Composite parent, SWTContent swt) {
 		super(comp, style);
 		
 		this.swt = swt;
 		
-		Display display = Display.getCurrent();
-		this.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
-		
-		parent.addListener(Pb.PropChangeEvent, handlePropChangeEvent());
+		this.addDrawListener(getDrawListener());
 	}
-	
-	private Listener handlePropChangeEvent() {
-		return new Listener() {
-			public void handleEvent(Event event) {
-				System.out.println("Properties Changed (" + event.item + ")");
-				// The drawingTool which is being used must be supplied
-				// as the event.data!
-				updateSampleView((DrawingTool) event.data);
+
+	private DrawListener getDrawListener() {
+		return new DrawListener() {
+			public void paintControl(PaintEvent e) {
+				if (drawingTool != null)
+					updateSampleView(drawingTool);
+			}
+			public void mouseUp(MouseEvent e) {
+				System.out.println("PbSampleView: No Action (mouseUp).");
+			}
+			public void mouseDown(MouseEvent e) {
+				System.out.println("PbSampleView: No Action (mouseDown).");
+			}
+			public void mouseDoubleClick(MouseEvent e) {
+				System.out.println("PbSampleView: No Action (mouseDoubleClick).");
+			}
+			public void mouseMove(MouseEvent e) {
+				System.out.println("PbSampleView: No Action (mouseMove).");
 			}
 		};
 	}
 
-	protected void updateSampleView(DrawingTool drawingTool) {
+	public void updateSampleView(DrawingTool drawingTool) {
+		this.drawingTool = drawingTool;
 		System.out.println("Generating Sample View using tool: " + drawingTool.disName);
-		// TODO: write the default constructors for each tool, so this comment
-		// could be un-commented.
-		/*try {
-			drawingTool.getCorrespondingDODefCons().newInstance().
-					drawSample(this, swt.propComp.getCurProps());
+		erase();
+		try {
+			PbDrawable drawable = new PbDrawable(this, getSize().x - 5, getSize().y - 5);
+			DrawingObject instance = drawingTool.getCorrespondingDOCons().newInstance(-1, -1, swt.propComp.getCurProps());
+			instance.drawSample(drawable);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}*/
+		}
+	}
+
+	private void erase() {
+		GC gc = new GC(this);
+		gc.setBackground(Display.getCurrent().getSystemColor(PbSWT.COLOR_WHITE));
+		gc.fillRectangle(0, 0, getSize().x, getSize().y);
+		gc.dispose();
 	}
 }

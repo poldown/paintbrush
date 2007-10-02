@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Scale;
 public class SimpleProperties extends BasicProperties {
 
 	public static final Property BCOLOR = new Property(
-			"bColor", Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
+			"bCOLOR", Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
 	public static final Property BCOLOR_TRANS = new Property(
 			"bColor_Trans", 255);
 	

@@ -37,6 +37,13 @@ public abstract class Properties {
 		return (Property[])(retProperties.toArray(new Property[0]));
 	}
 	
+	public void print() {
+		System.out.println("Properties from class: " + this.getClass().getSimpleName() + " {");
+		for (Property prop : properties)
+			System.out.println("\t" + prop.name + " = " + prop.value);
+		System.out.println("}");
+	}
+	
 	abstract public Property[] getProperties();
 	
 	public abstract class PropertiesComp extends Composite {

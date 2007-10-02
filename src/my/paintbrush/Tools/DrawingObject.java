@@ -2,6 +2,7 @@ package my.paintbrush.Tools;
 
 import my.paintbrush.Listeners.PbMouseListener;
 import my.paintbrush.PbControls.PbDo;
+import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.PointsManager;
 import my.paintbrush.Properties.Properties;
 
@@ -48,7 +49,5 @@ public abstract class DrawingObject {
 				"must be provided.");*/
 	}
 	
-	public DrawingObject(Drawable drawable, Properties prop) {
-		System.out.println("Drawing Sample...");
-	}
+	public abstract void drawSample(PbDrawable drawable);
 }

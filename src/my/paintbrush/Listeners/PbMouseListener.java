@@ -17,7 +17,7 @@ public abstract class PbMouseListener implements MouseListener {
 		return listening;
 	}
 	
-	public void stopListening() {
+	protected void stopListening() {
 		listening = false;
 	}
 }
