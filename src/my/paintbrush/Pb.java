@@ -20,6 +20,8 @@ import org.eclipse.swt.widgets.Shell;
 
 public class Pb {
 	
+	private static final DrawingTool defaultTool = DrawingTool.POINTER;
+	
 	private SWTContent swt;
 	private Shell shell;
 	
@@ -117,10 +119,16 @@ public class Pb {
 		shell.pack();
 		shell.open();
 		
+		selectDefaultTool();
+		
 		while (!shell.isDisposed())
 			if (!display.readAndDispatch())
 				display.sleep();
 		display.dispose();
+	}
+
+	private void selectDefaultTool() {
+		swt.toolSel.selectTool(defaultTool);
 	}
 
 	/**
