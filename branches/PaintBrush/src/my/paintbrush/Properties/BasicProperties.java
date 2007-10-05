@@ -1,5 +1,6 @@
 package my.paintbrush.Properties;
 
+import my.paintbrush.Controls.DrawingCanvas;
 import my.paintbrush.Controls.ImageCombo;
 
 import org.eclipse.swt.SWT;
@@ -29,7 +30,7 @@ import org.eclipse.swt.widgets.Spinner;
 public class BasicProperties extends EmptyProperties {
 
 	public static final Property WIDTH = new Property(
-			"width", 3);
+			"width", 2);
 	public static final Property FCOLOR = new Property(
 			"fCOLOR", Display.getCurrent().getSystemColor(SWT.COLOR_RED));
 	public static final Property FCOLOR_TRANS = new Property(
@@ -119,9 +120,6 @@ public class BasicProperties extends EmptyProperties {
 		}
 		
 		protected Scale addColorTransSel(final Canvas colorSel, int initialTrans) {
-			//TODO: BUG! Transparency isn't related to any property
-			//		causing a new created tool to lose its previous
-			//		state.
 			final Scale color_Transparency = new Scale(this, SWT.CHECK);
 			//color_Transparency.setText("Transparent");
 			color_Transparency.setMinimum(0);
@@ -187,18 +185,14 @@ public class BasicProperties extends EmptyProperties {
 			if (canvas.getData(enabledKey) == null)
 				canvas.addPaintListener(new PaintListener() {
 					public void paintControl(PaintEvent e) {
-						GC gc = new GC(canvas);
 						if (canvas.getData(enabledKey).equals(enabled)) {
+							GC gc = new GC(canvas);
 							gc.setForeground(canvas.getBackground());
 							gc.fillRectangle(0, 0, canvas.getSize().x, canvas.getSize().y);
+							gc.dispose();
 						} else if (canvas.getData(enabledKey).equals(disabled)) {
-							//gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-							//gc.fillRectangle(0, 0, canvas.getSize().x, canvas.getSize().y);
-							gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-							gc.drawLine(0, 0, 50, 50);
-							gc.drawLine(50, 0, 0, 50);
+							DrawingCanvas.drawNotAvailable(canvas);
 						}
-						gc.dispose();
 					}
 				});
 			canvas.setData(enabledKey, enable?enabled:disabled);

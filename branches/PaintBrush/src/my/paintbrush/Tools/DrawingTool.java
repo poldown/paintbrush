@@ -6,7 +6,7 @@ import my.paintbrush.Properties.Properties;
 import my.paintbrush.Properties.Property;
 
 public enum DrawingTool {
-	NONE("<none>", "", "my.paintbrush.Properties.Properties"),
+	NONE("<none>", "", "my.paintbrush.Properties.EmptyProperties"),
 	POINTER("Pointer", "my.paintbrush.Tools.Pointer", "my.paintbrush.Properties.PointerProperties"),
 	LINE("Line", "my.paintbrush.Tools.Line", "my.paintbrush.Properties.BasicProperties"),
 	//ARC("Arc", "my.paintbrush.Tools.Arc", "my.paintbrush.Properties.BasicProperties"),

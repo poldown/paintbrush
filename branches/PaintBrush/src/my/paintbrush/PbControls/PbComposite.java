@@ -35,7 +35,8 @@ public class PbComposite extends Composite {
 	private Label titleButton;
 	private String title;
 	
-	boolean mouseOver = false;
+	private final Font titleFont = new Font(
+			Display.getCurrent(), "Tahoma", 7, SWT.NONE);
 	
 	public PbComposite(Composite parent, int style, String title) {
 		super(parent, style);
@@ -67,11 +68,11 @@ public class PbComposite extends Composite {
 		titleCanvas.setLayout(new FormLayout());
 		
 		titleButton = new Label(titleCanvas, SWT.NONE);
-		titleButton.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		titleButton.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
 		
-		final Image titleButtonRegularImage = getTitleButtonImage(SWT.COLOR_YELLOW);
+		final Image titleButtonRegularImage = getTitleButtonImage(SWT.COLOR_DARK_YELLOW);
 		final Image titleButtonMouseOverImage = getTitleButtonImage(SWT.COLOR_GRAY);
-		final Image titleButtonPressedImage = getTitleButtonImage(SWT.COLOR_DARK_YELLOW);
+		final Image titleButtonPressedImage = getTitleButtonImage(SWT.COLOR_YELLOW);
 		
 		titleButton.setImage(titleButtonPressedImage);
 		data = new FormData();
@@ -125,6 +126,7 @@ public class PbComposite extends Composite {
 	
 	private Image getTitleButtonImage(int color) {
 		ImageData imageData = new ImageData(8, 8, 8, new PaletteData(0, 0, 0));
+		imageData.transparentPixel = 0;
 		Image image = new Image(Display.getCurrent(), imageData);
 		GC gc = new GC(image);
 		gc.setForeground(Display.getCurrent().getSystemColor(color));
@@ -149,12 +151,12 @@ public class PbComposite extends Composite {
 				new Pattern(display, 0, 0, 
 						titleCanvas.getSize().x,
 						titleCanvas.getSize().y,
-						display.getSystemColor(SWT.COLOR_BLUE),
-						display.getSystemColor(SWT.COLOR_BLACK)));
+						display.getSystemColor(SWT.COLOR_BLACK),
+						display.getSystemColor(SWT.COLOR_BLUE)));
 		gc.fillRoundRectangle(0, 0, titleCanvas.getSize().x, 
 							   titleCanvas.getSize().y, 10, 10);
 		gc.setForeground(display.getSystemColor(SWT.COLOR_WHITE));
-		gc.setFont(new Font(display, "Tahoma", 7, SWT.NONE));
+		gc.setFont(titleFont);
 		gc.drawText(title, 5, 2);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import my.paintbrush.Listeners.DrawListener;
 import my.paintbrush.Listeners.PbTypedListener;
+import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.IDGenerator;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
@@ -224,6 +225,7 @@ public class DrawingCanvas extends Canvas {
 
 	private boolean isHidden(PbPoint point) {
 		boolean hidden = false;
+		System.out.print("Is point: " + point + " hidden? ");
 		for (int i = drawingObjects.size() - 1; (i >= 0) && !drawingObjects.get(i).base.equals(point.drawingObject); i--) {
 			MaskedDrawingObject d_obj = drawingObjects.get(i);
 			Image mask = new Image(Display.getCurrent(), getMaskImageData());
@@ -235,6 +237,7 @@ public class DrawingCanvas extends Canvas {
 				break;
 			}
 		}
+		System.out.println(hidden);
 		return (hidden);
 	}
 
@@ -246,5 +249,25 @@ public class DrawingCanvas extends Canvas {
 						new RGB(0xFF, 0xFF, 0xFF)
 				})
 		);
+	}
+	
+	protected void drawNotAvailable() {
+		drawNotAvailable(this);
+	}
+	
+	public static void drawNotAvailable(Canvas canvas) {
+		GC gc = new GC(canvas);
+		gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		gc.drawLine(0, 0, canvas.getClientArea().width, canvas.getClientArea().height);
+		gc.drawLine(canvas.getClientArea().width, 0, 0, canvas.getClientArea().height);
+		gc.dispose();
+	}
+	
+	public static void drawNotAvailable(PbDrawable drawable) {
+		GC gc = new GC(drawable);
+		gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		gc.drawLine(0, 0, drawable.width, drawable.height);
+		gc.drawLine(drawable.width, 0, 0, drawable.height);
+		gc.dispose();
 	}
 }

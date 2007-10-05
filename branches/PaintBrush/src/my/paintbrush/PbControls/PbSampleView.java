@@ -57,6 +57,7 @@ public class PbSampleView extends DrawingCanvas {
 			instance.drawSample(drawable);
 		} catch (Exception e) {
 			e.printStackTrace();
+			drawNotAvailable();
 		}
 	}
 

@@ -125,6 +125,7 @@ public class PbDrawingCanvas extends DrawingCanvas {
 					);
 					lastPainted = new Image(Display.getCurrent(), lastPaintedImageData);
 					objMask1.draw(lastPainted, e.x, e.y);
+					lastPainted.getImageData().maskData = null;
 					obj.draw(canvas, e.x, e.y);
 				}
 			}

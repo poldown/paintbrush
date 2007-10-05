@@ -7,9 +7,55 @@ import my.paintbrush.Properties.PointerProperties;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.PaletteData;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 
 public class Pointer extends DrawingObject {
 
+	/**
+	 * data used to create a HAND cursor.
+	 */
+	static final byte[] HAND_SOURCE = {
+		(byte)0xf9,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xf0,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xf0,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xf0,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xf0,(byte)0x3f,(byte)0xff,(byte)0xff,
+		(byte)0xf0,(byte)0x07,(byte)0xff,(byte)0xff,
+		(byte)0xf0,(byte)0x03,(byte)0xff,(byte)0xff,
+		(byte)0xf0,(byte)0x00,(byte)0xff,(byte)0xff,
+
+		(byte)0x10,(byte)0x00,(byte)0x7f,(byte)0xff,
+		(byte)0x00,(byte)0x00,(byte)0x7f,(byte)0xff,
+		(byte)0x80,(byte)0x00,(byte)0x7f,(byte)0xff,
+		(byte)0xc0,(byte)0x00,(byte)0x7f,(byte)0xff,
+		(byte)0xe0,(byte)0x00,(byte)0x7f,(byte)0xff,
+		(byte)0xf0,(byte)0x00,(byte)0x7f,(byte)0xff,
+		(byte)0xf8,(byte)0x00,(byte)0xff,(byte)0xff,
+		(byte)0xfc,(byte)0x01,(byte)0xff,(byte)0xff,
+
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff,
+		(byte)0xff,(byte)0xff,(byte)0xff,(byte)0xff
+	};
+	
 	Color fColor;
 	
 	public Pointer(int x0, int y0, PointerProperties prop) {
@@ -52,7 +98,16 @@ public class Pointer extends DrawingObject {
 	}
 
 	public void drawSample(PbDrawable drawable) {
-		// Do nothing (TODO)
+		ImageData imageData = new ImageData(16, 16, 1, 
+				new PaletteData(new RGB[] {
+						new RGB(0, 0, 0),
+						new RGB(255, 255, 255)
+				}), -1, HAND_SOURCE);
+		Image image = new Image(Display.getCurrent(), imageData);
+		GC gc = new GC(drawable);
+		gc.drawImage(image, (drawable.width - image.getBounds().width) / 2,
+							(drawable.height - image.getBounds().height) / 2);
+		gc.dispose();
 	}
 	
 	@Override
