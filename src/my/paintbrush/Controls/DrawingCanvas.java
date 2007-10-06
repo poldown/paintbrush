@@ -3,13 +3,13 @@ package my.paintbrush.Controls;
 import java.util.ArrayList;
 import java.util.List;
 
+import my.paintbrush.DrawingObject.DrawingObject;
 import my.paintbrush.Listeners.DrawListener;
 import my.paintbrush.Listeners.PbTypedListener;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.IDGenerator;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
-import my.paintbrush.Tools.DrawingObject;
 import my.paintbrush.Tools.MaskedDrawingObject;
 
 import org.eclipse.swt.SWT;

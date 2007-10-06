@@ -1,5 +1,6 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.DrawingObject.SimpleDrawingObject;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.Properties.SimpleProperties;
 
@@ -7,21 +8,10 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
 
-public class Rectangle extends DrawingObject {
+public class Rectangle extends SimpleDrawingObject {
 
-	int width;
-	int[] lineDash;
-	Color bColor, fColor;
-	int fColor_Trans, bColor_Trans;
-	
 	public Rectangle(int x0, int y0, SimpleProperties prop) {
 		super(x0, y0, prop);
-		this.width = (Integer)prop.getProperty(SimpleProperties.WIDTH);
-		this.lineDash = (int[])prop.getProperty(SimpleProperties.LINEDASH);
-		this.fColor = (Color)prop.getProperty(SimpleProperties.FCOLOR);
-		this.fColor_Trans = (Integer)prop.getProperty(SimpleProperties.FCOLOR_TRANS);
-		this.bColor = (Color)prop.getProperty(SimpleProperties.BCOLOR);
-		this.bColor_Trans = (Integer)prop.getProperty(SimpleProperties.BCOLOR_TRANS);
 	}
 	
 	public void draw(Drawable drawable, int x1, int y1) {

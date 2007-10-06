@@ -3,6 +3,7 @@ package my.paintbrush.Tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import my.paintbrush.DrawingObject.SimpleDrawingObject;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
@@ -12,23 +13,13 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
 
-public class Shapes extends DrawingObject {
+public class Shapes extends SimpleDrawingObject {
 
 	int sidesNum;
 	List<PbPoint> points;
-	int width;
-	int[] lineDash;
-	Color bColor, fColor;
-	int fColor_Trans, bColor_Trans;
 	
 	public Shapes(int x0, int y0, ShapesProperties prop) {
 		super(x0, y0, prop);
-		this.width = (Integer)prop.getProperty(ShapesProperties.WIDTH);
-		this.lineDash = (int[])prop.getProperty(ShapesProperties.LINEDASH);
-		this.fColor = (Color)prop.getProperty(ShapesProperties.FCOLOR);
-		this.fColor_Trans = (Integer)prop.getProperty(ShapesProperties.FCOLOR_TRANS);
-		this.bColor = (Color)prop.getProperty(ShapesProperties.BCOLOR);
-		this.bColor_Trans = (Integer)prop.getProperty(ShapesProperties.BCOLOR_TRANS);
 		this.sidesNum = (Integer)prop.getProperty(ShapesProperties.SIDESNUM);
 	}
 	

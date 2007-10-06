@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import my.paintbrush.DrawingObject.SimpleDrawingObject;
 import my.paintbrush.Listeners.PbMouseListener;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.PbPoint;
@@ -15,24 +16,14 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
 
-public class FreePolygon extends DrawingObject {
+public class FreePolygon extends SimpleDrawingObject {
 
-	int width;
-	int[] lineDash;
-	Color fColor, bColor;
-	int fColor_Trans, bColor_Trans;
 	List<PbPoint> points;
 	
 	public FreePolygon(int x0, int y0, SimpleProperties prop) {
 		super(x0, y0, prop);
 		this.points = new ArrayList<PbPoint>();
 		this.points.add(new PbPoint(x0, y0));
-		this.width = (Integer)prop.getProperty(SimpleProperties.WIDTH);
-		this.lineDash = (int[])prop.getProperty(SimpleProperties.LINEDASH);
-		this.fColor = (Color)prop.getProperty(SimpleProperties.FCOLOR);
-		this.fColor_Trans = (Integer)prop.getProperty(SimpleProperties.FCOLOR_TRANS);
-		this.bColor = (Color)prop.getProperty(SimpleProperties.BCOLOR);
-		this.bColor_Trans = (Integer)prop.getProperty(SimpleProperties.BCOLOR_TRANS);
 	}
 	
 	public void draw(Drawable drawable, int x1, int y1) {

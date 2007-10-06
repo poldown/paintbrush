@@ -4,28 +4,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import my.paintbrush.DrawingObject.BasicDrawingObject;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.Properties.BasicProperties;
 
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
 
-public class FreeDraw extends DrawingObject {
+public class FreeDraw extends BasicDrawingObject {
 
 	List<PbPoint> points;
-	int width;
-	int[] lineDash;
-	Color fColor;
 	
 	public FreeDraw(int x0, int y0, BasicProperties prop) {
 		super(x0, y0, prop);
 		points = new ArrayList<PbPoint>();
 		points.add(new PbPoint(x0, y0));
-		this.width = (Integer)prop.getProperty(BasicProperties.WIDTH);
-		this.lineDash = (int[])prop.getProperty(BasicProperties.LINEDASH);
-		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
 	public void draw(Drawable drawable, int x1, int y1) {

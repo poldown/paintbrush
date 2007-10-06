@@ -1,6 +1,6 @@
 package my.paintbrush.Events;
 
-import my.paintbrush.Tools.DrawingTool;
+import my.paintbrush.DrawingObject.DrawingTool;
 
 import org.eclipse.swt.widgets.Event;
 

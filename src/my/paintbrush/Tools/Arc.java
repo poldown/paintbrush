@@ -1,23 +1,16 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.DrawingObject.BasicDrawingObject;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.Properties.BasicProperties;
 
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
 
-public class Arc extends DrawingObject {
-
-	int width;
-	int[] lineDash;
-	Color fColor;
+public class Arc extends BasicDrawingObject {
 	
 	public Arc(int x0, int y0, BasicProperties prop) {
 		super(x0, y0, prop);
-		this.width = (Integer)prop.getProperty(BasicProperties.WIDTH);
-		this.lineDash = (int[])prop.getProperty(BasicProperties.LINEDASH);
-		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
 	}
 	
 	public void draw(Drawable drawable, int x1, int y1) {

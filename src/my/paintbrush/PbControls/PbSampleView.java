@@ -3,9 +3,9 @@ package my.paintbrush.PbControls;
 import my.paintbrush.PbSWT;
 import my.paintbrush.SWTContent;
 import my.paintbrush.Controls.DrawingCanvas;
+import my.paintbrush.DrawingObject.DrawingObject;
+import my.paintbrush.DrawingObject.DrawingTool;
 import my.paintbrush.Listeners.DrawListener;
-import my.paintbrush.Tools.DrawingObject;
-import my.paintbrush.Tools.DrawingTool;
 
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;

@@ -1,26 +1,17 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.DrawingObject.BasicDrawingObject;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.PointsManager;
 import my.paintbrush.Properties.BasicProperties;
 
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
 
-public class Line extends DrawingObject {
-
-	int width;
-	int[] lineDash;
-	Color fColor;
-	int fColor_Trans;
+public class Line extends BasicDrawingObject {
 	
 	public Line(int x0, int y0, BasicProperties prop) {
 		super(x0, y0, prop);
-		this.width = (Integer)prop.getProperty(BasicProperties.WIDTH);
-		this.lineDash = (int[])prop.getProperty(BasicProperties.LINEDASH);
-		this.fColor = (Color)prop.getProperty(BasicProperties.FCOLOR);
-		this.fColor_Trans = (Integer)prop.getProperty(BasicProperties.FCOLOR_TRANS);
 	}
 	
 	public void draw(Drawable drawable, int x1, int y1) {
