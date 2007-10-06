@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import my.paintbrush.DrawingObject.DrawingObject;
+import my.paintbrush.DrawingObject.PbDrawingObject;
 import my.paintbrush.Listeners.DrawListener;
 import my.paintbrush.Listeners.PbTypedListener;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.IDGenerator;
 import my.paintbrush.PointsManager.PbPoint;
 import my.paintbrush.PointsManager.PointsManager;
-import my.paintbrush.Tools.MaskedDrawingObject;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -33,7 +33,7 @@ public class DrawingCanvas extends Canvas {
 	private final int PDM_Moving = 2;
 	private final int PDM_Hidden = 3;
 	
-	public java.util.List<MaskedDrawingObject> drawingObjects = new ArrayList<MaskedDrawingObject>();
+	public java.util.List<PbDrawingObject> drawingObjects = new ArrayList<PbDrawingObject>();
 	public List<PbPoint> drawingPoints = new ArrayList<PbPoint>();
 	
 	List<DrawingObject> selectedObjects = new ArrayList<DrawingObject>();
@@ -53,14 +53,14 @@ public class DrawingCanvas extends Canvas {
 		addListener (SWT.Paint, typedListener);
 	}
 	
-	protected void generateSelection(MaskedDrawingObject selectObj) {
+	protected void generateSelection(PbDrawingObject selectObj) {
 		org.eclipse.swt.graphics.Rectangle rect = new Rectangle(
 				Math.min(selectObj.base.x0, selectObj.base.x1), 
 				Math.min(selectObj.base.y0, selectObj.base.y1),
 				Math.abs(selectObj.base.x1 - selectObj.base.x0),
 				Math.abs(selectObj.base.y1 - selectObj.base.y0));
 		if (rect.height == 0 && rect.width == 0) {
-			MaskedDrawingObject objToSelect = null;
+			PbDrawingObject objToSelect = null;
 			ImageData maskImageData = new ImageData(
 					this.getSize().x, this.getSize().y, 1, 
 					new PaletteData(new RGB[] {
@@ -69,7 +69,7 @@ public class DrawingCanvas extends Canvas {
 					})
 			);
 			for (int i = drawingObjects.size() - 1; i >= 0; i--) {
-				MaskedDrawingObject d_obj = drawingObjects.get(i);
+				PbDrawingObject d_obj = drawingObjects.get(i);
 				Image mask = new Image(Display.getCurrent(), maskImageData);
 				d_obj.mask1.draw(mask, -1, -1);
 				ImageData imageData = mask.getImageData();
@@ -85,7 +85,7 @@ public class DrawingCanvas extends Canvas {
 				selectObject(objToSelect.base);
 			}
 		} else {
-			for (MaskedDrawingObject d_obj : drawingObjects) {
+			for (PbDrawingObject d_obj : drawingObjects) {
 				boolean select = true;
 				for (PbPoint point : d_obj.base.getPointsManager().getPoints())
 					if (!rect.contains(point.x, point.y))
@@ -96,7 +96,7 @@ public class DrawingCanvas extends Canvas {
 		}
 	}
 
-	private void moveObjectToFront(MaskedDrawingObject dObj) {
+	private void moveObjectToFront(PbDrawingObject dObj) {
 		drawingObjects.add(dObj);
 		drawingObjects.remove(dObj);
 		paintAll();
@@ -122,7 +122,7 @@ public class DrawingCanvas extends Canvas {
 	
 	public void paintAll(Rectangle rect) {
 		Image workImage = new Image(Display.getCurrent(), this.getSize().x, this.getSize().y);
-		for (MaskedDrawingObject obj : drawingObjects)
+		for (PbDrawingObject obj : drawingObjects)
 			obj.base.draw(workImage, -1, -1);
 		GC gc = new GC(workImage);
 		for (PbPoint point : drawingPoints)
@@ -172,7 +172,7 @@ public class DrawingCanvas extends Canvas {
 	}
 	
 	public void selectAllObjects() {
-		for (MaskedDrawingObject obj : drawingObjects)
+		for (PbDrawingObject obj : drawingObjects)
 			selectObject(obj.base);
 	}
 	
@@ -227,7 +227,7 @@ public class DrawingCanvas extends Canvas {
 		boolean hidden = false;
 		System.out.print("Is point: " + point + " hidden? ");
 		for (int i = drawingObjects.size() - 1; (i >= 0) && !drawingObjects.get(i).base.equals(point.drawingObject); i--) {
-			MaskedDrawingObject d_obj = drawingObjects.get(i);
+			PbDrawingObject d_obj = drawingObjects.get(i);
 			Image mask = new Image(Display.getCurrent(), getMaskImageData());
 			d_obj.mask1.draw(mask, -1, -1);
 			ImageData imageData = mask.getImageData();
