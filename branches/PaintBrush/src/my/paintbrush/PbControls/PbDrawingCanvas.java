@@ -6,11 +6,11 @@ import my.paintbrush.SWTContent;
 import my.paintbrush.Controls.DrawingCanvas;
 import my.paintbrush.DrawingObject.DrawingObject;
 import my.paintbrush.DrawingObject.DrawingTool;
+import my.paintbrush.DrawingObject.PbDrawingObject;
 import my.paintbrush.Listeners.DrawListener;
 import my.paintbrush.Listeners.PbMouseListener;
 import my.paintbrush.Properties.Properties;
 import my.paintbrush.Properties.Property;
-import my.paintbrush.Tools.MaskedDrawingObject;
 
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
@@ -80,7 +80,7 @@ public class PbDrawingCanvas extends DrawingCanvas {
 							DrawingObject instanceMask1 = cons.newInstance(e.x, e.y, maskProp1);
 							Properties maskProp2 = changePropertiesColor(cons, new RGB(0, 0, 0));
 							DrawingObject instanceMask2 = cons.newInstance(e.x, e.y, maskProp2);
-							drawingObjects.add(new MaskedDrawingObject(instance, instanceMask1, instanceMask2));
+							drawingObjects.add(new PbDrawingObject(instance, instanceMask1, instanceMask2));
 							pbMouseListener = instance.getPbMouseListener();
 							pbMouseListenerMask1 = instanceMask1.getPbMouseListener();
 							pbMouseListenerMask2 = instanceMask2.getPbMouseListener();
@@ -145,7 +145,7 @@ public class PbDrawingCanvas extends DrawingCanvas {
 	}
 
 	private void handlePbDo(PbDo pbDo) {
-		MaskedDrawingObject obj = drawingObjects.get(drawingObjects.size() - 1);
+		PbDrawingObject obj = drawingObjects.get(drawingObjects.size() - 1);
 		pbDo.run();
 		if (pbDo.deleteObject) {
 			//drawImage(lastPainted, canvas);
