@@ -1,7 +1,7 @@
 package my.paintbrush.PointsManager;
 
+import my.paintbrush.DrawingObject.DrawingObject;
 import my.paintbrush.PointsManager.IDGenerator.ID;
-import my.paintbrush.Tools.DrawingObject;
 
 import org.eclipse.swt.graphics.Point;
 

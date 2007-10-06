@@ -4,12 +4,12 @@ import java.lang.reflect.Constructor;
 
 import my.paintbrush.SWTContent;
 import my.paintbrush.Controls.DrawingCanvas;
+import my.paintbrush.DrawingObject.DrawingObject;
+import my.paintbrush.DrawingObject.DrawingTool;
 import my.paintbrush.Listeners.DrawListener;
 import my.paintbrush.Listeners.PbMouseListener;
 import my.paintbrush.Properties.Properties;
 import my.paintbrush.Properties.Property;
-import my.paintbrush.Tools.DrawingObject;
-import my.paintbrush.Tools.DrawingTool;
 import my.paintbrush.Tools.MaskedDrawingObject;
 
 import org.eclipse.swt.events.MouseEvent;

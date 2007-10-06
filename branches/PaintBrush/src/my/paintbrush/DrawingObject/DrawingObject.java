@@ -1,4 +1,4 @@
-package my.paintbrush.Tools;
+package my.paintbrush.DrawingObject;
 
 import my.paintbrush.Listeners.PbMouseListener;
 import my.paintbrush.PbControls.PbDo;

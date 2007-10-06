@@ -2,10 +2,10 @@ package my.paintbrush.PbControls;
 
 import my.paintbrush.PbSWT;
 import my.paintbrush.Controls.DrawingCanvas;
+import my.paintbrush.DrawingObject.DrawingObject;
+import my.paintbrush.DrawingObject.DrawingTool;
 import my.paintbrush.Events.PbControlEvent;
 import my.paintbrush.Properties.Properties;
-import my.paintbrush.Tools.DrawingObject;
-import my.paintbrush.Tools.DrawingTool;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

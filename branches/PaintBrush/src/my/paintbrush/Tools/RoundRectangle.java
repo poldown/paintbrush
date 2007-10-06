@@ -1,5 +1,6 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.DrawingObject.SimpleDrawingObject;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.Properties.RoundRectangleProperties;
 
@@ -7,22 +8,12 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
 
-public class RoundRectangle extends DrawingObject {
+public class RoundRectangle extends SimpleDrawingObject {
 
-	int width;
-	int[] lineDash;
-	Color fColor, bColor;
-	int fColor_Trans, bColor_Trans;
 	int arcW, arcH;
 	
 	public RoundRectangle(int x0, int y0, RoundRectangleProperties prop) {
 		super(x0, y0, prop);
-		this.width = (Integer)prop.getProperty(RoundRectangleProperties.WIDTH);
-		this.lineDash = (int[])prop.getProperty(RoundRectangleProperties.LINEDASH);
-		this.fColor = (Color)prop.getProperty(RoundRectangleProperties.FCOLOR);
-		this.fColor_Trans = (Integer)prop.getProperty(RoundRectangleProperties.FCOLOR_TRANS);
-		this.bColor = (Color)prop.getProperty(RoundRectangleProperties.BCOLOR);
-		this.bColor_Trans = (Integer)prop.getProperty(RoundRectangleProperties.BCOLOR_TRANS);
 		this.arcW = (Integer)prop.getProperty(RoundRectangleProperties.ARCW);
 		this.arcH = (Integer)prop.getProperty(RoundRectangleProperties.ARCH);
 	}

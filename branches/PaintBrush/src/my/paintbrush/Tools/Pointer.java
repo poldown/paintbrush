@@ -1,5 +1,6 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.DrawingObject.EmptyDrawingObject;
 import my.paintbrush.PbControls.PbDo;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.Properties.PointerProperties;
@@ -13,7 +14,7 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-public class Pointer extends DrawingObject {
+public class Pointer extends EmptyDrawingObject {
 
 	/**
 	 * data used to create a HAND cursor.

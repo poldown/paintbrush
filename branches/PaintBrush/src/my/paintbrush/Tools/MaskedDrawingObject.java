@@ -1,5 +1,7 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.DrawingObject.DrawingObject;
+
 public class MaskedDrawingObject {
 
 	public DrawingObject base;

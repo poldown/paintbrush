@@ -1,4 +1,4 @@
-package my.paintbrush.Tools;
+package my.paintbrush.DrawingObject;
 
 import java.lang.reflect.Constructor;
 
