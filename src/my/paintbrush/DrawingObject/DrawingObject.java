@@ -13,7 +13,13 @@ public abstract class DrawingObject {
 	public int x0, y0;
 	public int x1, y1;
 	
-	public PointsManager pointsManager = getPointsManager();
+	public PointsManager pointsManager;
+	
+	protected boolean MASK_MODE = false;
+	
+	public void setMaskMode(boolean maskMode) {
+		MASK_MODE = maskMode;
+	}
 	
 	public abstract void draw(Drawable drawable, int x1, int y1);
 	
@@ -24,7 +30,7 @@ public abstract class DrawingObject {
 	/**
 	 * Default PointsManager
 	 */
-	public PointsManager getPointsManager() {
+	protected PointsManager getPointsManager() {
 		PointsManager pointsManager = 
 			new PointsManager(PointsManager.RectangleMode);
 		pointsManager.linkDrawingObject(this);
@@ -44,6 +50,7 @@ public abstract class DrawingObject {
 	public DrawingObject(int x0, int y0, Properties prop) {
 		this.x0 = this.x1 = x0;
 		this.y0 = this.y1 = y0;
+		this.pointsManager = getPointsManager();
 		/*throw new PbException("A constructor for the tool with the " +
 				"following arguments: int x0, int y0, Properties prop " +
 				"must be provided.");*/

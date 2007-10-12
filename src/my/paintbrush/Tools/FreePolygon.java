@@ -22,7 +22,6 @@ public class FreePolygon extends SimpleDrawingObject {
 	
 	public FreePolygon(int x0, int y0, SimpleProperties prop) {
 		super(x0, y0, prop);
-		this.points = new ArrayList<PbPoint>();
 		this.points.add(new PbPoint(x0, y0));
 	}
 	
@@ -69,9 +68,10 @@ public class FreePolygon extends SimpleDrawingObject {
 		return intArr;
 	}
 	
-	public PointsManager getPointsManager() {
+	protected PointsManager getPointsManager() {
 		PointsManager pointsManager = 
 			new PointsManager(PointsManager.PointsListMode);
+		this.points = new ArrayList<PbPoint>();
 		pointsManager.linkPointsList(this.points);
 		return pointsManager;
 	}

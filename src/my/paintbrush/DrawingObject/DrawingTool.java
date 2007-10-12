@@ -15,7 +15,8 @@ public enum DrawingTool {
 	ELLIPSE("Ellipse", "my.paintbrush.Tools.Ellipse", "my.paintbrush.Properties.SimpleProperties"),
 	FREEDRAW("Free Drawing", "my.paintbrush.Tools.FreeDraw", "my.paintbrush.Properties.BasicProperties"),
 	SHAPES("Shapes", "my.paintbrush.Tools.Shapes", "my.paintbrush.Properties.ShapesProperties"),
-	FREEPOLYGON("Free Polygon", "my.paintbrush.Tools.FreePolygon", "my.paintbrush.Properties.SimpleProperties");
+	FREEPOLYGON("Free Polygon", "my.paintbrush.Tools.FreePolygon", "my.paintbrush.Properties.SimpleProperties"),
+	TEXT("Text", "my.paintbrush.Tools.Text", "my.paintbrush.Properties.SimpleProperties");
 	
 	public String disName;
 	public String className;
