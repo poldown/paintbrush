@@ -87,7 +87,7 @@ public class DrawingCanvas extends Canvas {
 		} else {
 			for (PbDrawingObject d_obj : drawingObjects) {
 				boolean select = true;
-				for (PbPoint point : d_obj.base.getPointsManager().getPoints())
+				for (PbPoint point : d_obj.base.pointsManager.getPoints())
 					if (!rect.contains(point.x, point.y))
 						select = false;
 				if (select)

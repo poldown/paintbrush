@@ -43,10 +43,10 @@ public class RoundRectangle extends SimpleDrawingObject {
 	}
 	
 	public void drawSample(PbDrawable drawable) {
-		x0 = width / 2;
-		y0 = width / 2;
-		x1 = drawable.width - width / 2;
-		y1 = drawable.height - width / 2;
+		x0 = width / 2 + drawable.width / 10;
+		y0 = width / 2 + drawable.height / 10;
+		x1 = (drawable.width * 9) / 10 - width / 2;
+		y1 = (drawable.height * 9) / 10 - width / 2;
 		draw(drawable, -1, -1);
 	}
 	

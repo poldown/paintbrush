@@ -71,7 +71,7 @@ public class Shapes extends SimpleDrawingObject {
 		return intArr;
 	}
 	
-	public PointsManager getPointsManager() {
+	protected PointsManager getPointsManager() {
 		PointsManager pointsManager = 
 			new PointsManager(PointsManager.PointsListMode);
 		this.points = new ArrayList<PbPoint>();

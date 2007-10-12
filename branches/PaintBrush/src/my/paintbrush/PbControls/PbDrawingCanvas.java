@@ -6,6 +6,7 @@ import my.paintbrush.SWTContent;
 import my.paintbrush.Controls.DrawingCanvas;
 import my.paintbrush.DrawingObject.DrawingObject;
 import my.paintbrush.DrawingObject.DrawingTool;
+import my.paintbrush.DrawingObject.ObjNameGenerator;
 import my.paintbrush.DrawingObject.PbDrawingObject;
 import my.paintbrush.Listeners.DrawListener;
 import my.paintbrush.Listeners.PbMouseListener;
@@ -36,6 +37,8 @@ public class PbDrawingCanvas extends DrawingCanvas {
 	private SWTContent swt;
 	
 	private Image backImage, lastPainted;
+	
+	private ObjNameGenerator objNameGenerator = new ObjNameGenerator();
 	
 	public PbDrawingCanvas (Composite parent, int style, SWTContent swt) {
 		super (parent, style);
@@ -80,7 +83,8 @@ public class PbDrawingCanvas extends DrawingCanvas {
 							DrawingObject instanceMask1 = cons.newInstance(e.x, e.y, maskProp1);
 							Properties maskProp2 = changePropertiesColor(cons, new RGB(0, 0, 0));
 							DrawingObject instanceMask2 = cons.newInstance(e.x, e.y, maskProp2);
-							drawingObjects.add(new PbDrawingObject(instance, instanceMask1, instanceMask2));
+							String name = objNameGenerator.getObjNameForTool(drawingTool);
+							drawingObjects.add(new PbDrawingObject(name, instance, instanceMask1, instanceMask2));
 							pbMouseListener = instance.getPbMouseListener();
 							pbMouseListenerMask1 = instanceMask1.getPbMouseListener();
 							pbMouseListenerMask2 = instanceMask2.getPbMouseListener();
@@ -109,6 +113,7 @@ public class PbDrawingCanvas extends DrawingCanvas {
 					DrawingObject objMask2 = drawingObjects.get(index).mask2;
 					//drawImage(backImage, canvas);
 					if (lastPainted != null && !lastPainted.isDisposed()) {
+						objMask2.setMaskMode(true);
 						objMask2.draw(lastPainted, e.x, e.y);
 						//drawImage(lastPainted, canvas);
 						Image image = new Image(Display.getCurrent(), backImage.getImageData(), lastPainted.getImageData());
@@ -124,6 +129,7 @@ public class PbDrawingCanvas extends DrawingCanvas {
 							})
 					);
 					lastPainted = new Image(Display.getCurrent(), lastPaintedImageData);
+					objMask1.setMaskMode(true);
 					objMask1.draw(lastPainted, e.x, e.y);
 					lastPainted.getImageData().maskData = null;
 					obj.draw(canvas, e.x, e.y);
@@ -137,7 +143,7 @@ public class PbDrawingCanvas extends DrawingCanvas {
 			}
 		};
 	}
-	
+
 	private void updateBackImage() {
 		if (backImage != null)
 			backImage.dispose();
@@ -145,6 +151,7 @@ public class PbDrawingCanvas extends DrawingCanvas {
 	}
 
 	private void handlePbDo(PbDo pbDo) {
+		//TODO: pbDo actions should be executed through events!
 		PbDrawingObject obj = drawingObjects.get(drawingObjects.size() - 1);
 		pbDo.run();
 		if (pbDo.deleteObject) {

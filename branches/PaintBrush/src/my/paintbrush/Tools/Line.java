@@ -1,5 +1,6 @@
 package my.paintbrush.Tools;
 
+import my.paintbrush.PbSWT;
 import my.paintbrush.DrawingObject.BasicDrawingObject;
 import my.paintbrush.PbControls.PbDrawable;
 import my.paintbrush.PointsManager.PointsManager;
@@ -19,19 +20,22 @@ public class Line extends BasicDrawingObject {
 			GC gc = new GC(drawable);
 			gc.setLineWidth(this.width);
 			gc.setLineDash(this.lineDash);
-			gc.setAlpha(this.fColor_Trans);
+			if (!MASK_MODE) {
+				gc.setAlpha(this.fColor_Trans);
+				gc.setAntialias(PbSWT.ON);
+			}
 			if (x1 != -1 && y1 != -1) {
 				this.x1 = x1;
 				this.y1 = y1;
 			}
 			gc.setForeground(this.fColor);
 			gc.drawLine(this.x0, this.y0, this.x1, this.y1);
-			gc.setAlpha(-1);
+			//gc.setAlpha(-1);
 			gc.dispose();
 		}
 	}
 	
-	public PointsManager getPointsManager() {
+	protected PointsManager getPointsManager() {
 		PointsManager pointsManager = 
 			new PointsManager(PointsManager.LineMode);
 		pointsManager.linkDrawingObject(this);
